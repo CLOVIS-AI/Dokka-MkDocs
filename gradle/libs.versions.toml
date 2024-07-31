@@ -1,9 +1,12 @@
 # List of dependencies of the project
 
 [versions]
+dokka = "1.9.20"    # https://github.com/Kotlin/dokka/releases
 
 [plugins]
 
 [libraries]
+dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
+dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka" }
 
 [bundles]

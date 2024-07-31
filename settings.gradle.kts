@@ -51,6 +51,8 @@ plugins {
 }
 
 include(
+	"plugin",
+
 	"gradle:templates:template-app",
 	"gradle:templates:template-lib",
 )
