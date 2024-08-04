@@ -51,7 +51,7 @@ plugins {
 }
 
 include(
-	"plugin",
+	"renderer",
 
 	"example:example-core",
 

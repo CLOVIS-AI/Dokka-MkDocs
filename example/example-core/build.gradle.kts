@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-	dokkaPlugin(projects.plugin)
+	dokkaPlugin(projects.renderer)
 }
 
 kotlin {
