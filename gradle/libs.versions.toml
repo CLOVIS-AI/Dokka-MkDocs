@@ -2,11 +2,14 @@
 
 [versions]
 dokka = "1.9.20"    # https://github.com/Kotlin/dokka/releases
+dokkatoo = "2.3.1"  # https://github.com/adamko-dev/dokkatoo/releases
 
 [plugins]
 
 [libraries]
 dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
 dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka" }
+
+gradle-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatoo" }
 
 [bundles]

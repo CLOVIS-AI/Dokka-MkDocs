@@ -1,10 +1,6 @@
 plugins {
 	kotlin("multiplatform")
-	id("org.jetbrains.dokka") version libs.versions.dokka
-}
-
-dependencies {
-	dokkaPlugin(projects.renderer)
+	id("opensavvy.dokka.dokkatoo-mkdocs") version "VERSION HERE"
 }
 
 kotlin {
