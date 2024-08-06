@@ -1,6 +1,6 @@
 plugins {
 	kotlin("multiplatform")
-	id("opensavvy.dokka.dokkatoo-mkdocs") version "VERSION HERE"
+	id("dev.opensavvy.dokkatoo-mkdocs") version "VERSION HERE"
 }
 
 kotlin {

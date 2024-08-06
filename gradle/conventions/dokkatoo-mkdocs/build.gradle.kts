@@ -9,6 +9,15 @@ dependencies {
 	implementation(libs.gradle.dokkatoo)
 }
 
+gradlePlugin {
+	plugins {
+		register("dokkatoo-mkdocs") {
+			id = "dev.opensavvy.dokkatoo-mkdocs"
+			implementationClass = "opensavvy.dokka.gradle.DokkatooMkDocsPlugin"
+		}
+	}
+}
+
 library {
 	name.set("Dokkatoo Material for MkDocs format")
 	description.set("Gradle plugin to add the Material for MkDocs format to Dokkatoo")
