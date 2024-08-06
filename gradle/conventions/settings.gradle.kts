@@ -50,4 +50,5 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(
 	"dokkatoo-mkdocs",
+	"dokkatoo-mkdocs-combine",
 )

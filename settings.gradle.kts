@@ -57,4 +57,5 @@ include(
 
 	"gradle:templates:template-app",
 	"gradle:templates:template-lib",
+	"docs:website",
 )
