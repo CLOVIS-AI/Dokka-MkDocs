@@ -51,6 +51,10 @@ plugins {
 }
 
 include(
+	"renderer",
+
+	"example:example-core",
+
 	"gradle:templates:template-app",
 	"gradle:templates:template-lib",
 )

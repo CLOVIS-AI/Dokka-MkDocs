@@ -2,6 +2,11 @@
 
 A [Dokka](https://github.com/Kotlin/dokka) output format tailored for inclusion into a [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) website.
 
+This repository is composed of:
+- [The Dokka renderer](renderer) that generates the Material for MkDocs pages,
+- [The Gradle plugin](gradle/conventions/dokkatoo-mkdocs) that configures the project,
+- [An example project](example).
+
 ## License
 
 This project is licensed under the [Apache 2.0 license](LICENSE).
