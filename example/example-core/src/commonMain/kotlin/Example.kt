@@ -3,6 +3,12 @@ package opensavvy.dokka.material.mkdocs.example
 /**
  * This class is an example to see how the documentation website is generated.
  *
+ * ### Example
+ *
+ * ```kotlin
+ * Example().foo("Hello") shouldBe "Hello world!"
+ * ```
+ *
  * @constructor Public constructor for the [Example] class.
  */
 class Example {
