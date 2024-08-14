@@ -3,6 +3,7 @@ package opensavvy.dokka.gradle
 import dev.adamko.dokkatoo.formats.DokkatooFormatPlugin
 import dev.adamko.dokkatoo.internal.DokkatooInternalApi
 import org.gradle.api.Project
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.Sync
 import org.gradle.kotlin.dsl.*
 import java.io.File
@@ -18,6 +19,13 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 		val embedDokkaIntoMkDocs by target.tasks.registering(Sync::class) {
 			from(dokkatooMkdocsModuleOutputDirectoriesResolver)
 			into(target.layout.dir(target.provider { File("docs/api") }))
+
+			eachFile {
+				path = path.removePrefix("module/")
+			}
+
+			includeEmptyDirs = true
+			duplicatesStrategy = DuplicatesStrategy.WARN //TODO make each module generate files in its own directory, afterwards remove this
 		}
 	}
 
