@@ -18,3 +18,9 @@ configurations.all {
 		substitute(module("dev.opensavvy.dokka.mkdocs:renderer")).using(project(":renderer"))
 	}
 }
+
+dokkatoo {
+	dokkatooSourceSets.configureEach {
+		this.displayName.set("Example Core")
+	}
+}
