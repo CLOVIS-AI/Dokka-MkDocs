@@ -9,6 +9,15 @@ package opensavvy.dokka.material.mkdocs.example
  * Example().foo("Hello") shouldBe "Hello world!"
  * ```
  *
+ * Another example:
+ * ```java
+ * class Foo {
+ *     public static void main(String[] args) {
+ *         System.out.println("Hello world!" + 3 + true);
+ *     }
+ * }
+ * ```
+ *
  * @constructor Public constructor for the [Example] class.
  */
 class Example {

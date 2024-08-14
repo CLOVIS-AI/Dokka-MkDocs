@@ -39,6 +39,19 @@ open class MkDocsRenderer(
 				buildParagraph()
 			}
 
+			node.hasStyle(TextStyle.Monospace) -> {
+				append("<div class=\"highlight\">")
+				append("<pre>")
+				append("<code class=\"md-code__content\">")
+				append("<span>")
+				childrenCallback()
+				append("</span>")
+				append("</code>")
+				append("</pre>")
+				append("</div>")
+				Unit
+			}
+
 			node.dci.kind == ContentKind.Deprecation -> {
 				append("---")
 				childrenCallback()
@@ -63,9 +76,9 @@ open class MkDocsRenderer(
 	}
 
 	override fun StringBuilder.buildLink(address: String, content: StringBuilder.() -> Unit) {
-		append("[")
+		append("<a href=\"$address\">")
 		content()
-		append("]($address)")
+		append("</a>")
 	}
 
 	override fun StringBuilder.buildList(
@@ -135,7 +148,7 @@ open class MkDocsRenderer(
 	}
 
 	override fun StringBuilder.buildLineBreak() {
-		append("\\")
+		append("<br/>")
 		buildNewLine()
 	}
 
@@ -250,9 +263,9 @@ open class MkDocsRenderer(
 		} else if (textNode.text.isNotBlank()) {
 			val decorators = decorators(textNode.style)
 			append(textNode.text.takeWhile { it == ' ' })
-			append(decorators)
+			for (decorator in decorators) append(decorator.start)
 			append(textNode.text.trim().htmlEscape())
-			append(decorators.reversed())
+			for (decorator in decorators.reversed()) append(decorator.end)
 			append(textNode.text.takeLastWhile { it == ' ' })
 		}
 	}
@@ -367,15 +380,29 @@ open class MkDocsRenderer(
 		append("`")
 	}
 
-	private fun decorators(styles: Set<Style>) = buildString {
-		styles.forEach {
-			when (it) {
-				TextStyle.Bold -> append("**")
-				TextStyle.Italic -> append("*")
-				TextStyle.Strong -> append("**")
-				TextStyle.Strikethrough -> append("~~")
-				else -> Unit
-			}
+	private fun decorators(styles: Set<Style>): List<Decorator> = styles.mapNotNull {
+		when (it) {
+			TextStyle.Bold -> Decorator("**", "**")
+			TextStyle.Italic -> Decorator("*", "*")
+			TextStyle.Strong -> Decorator("**", "**")
+			TextStyle.Strikethrough -> Decorator("~~", "~~")
+			TokenStyle.Keyword -> Decorator.ofSpan("kd")
+			TokenStyle.Punctuation -> Decorator.ofSpan("p")
+			TokenStyle.Function -> Decorator.ofSpan("nf")
+			TokenStyle.Operator -> Decorator.ofSpan("o")
+			TokenStyle.Annotation -> Decorator.ofSpan("se")
+			TokenStyle.Number -> Decorator.ofSpan("mi")
+			TokenStyle.String -> Decorator.ofSpan("s")
+			TokenStyle.Boolean -> Decorator.ofSpan("kc")
+			TokenStyle.Constant -> Decorator.ofSpan("nb")
+			else -> null
+		}
+	}
+
+	private class Decorator(val start: String, val end: String) {
+
+		companion object {
+			fun ofSpan(classes: String) = Decorator("<span class=\"$classes\">", "</span>")
 		}
 	}
 
