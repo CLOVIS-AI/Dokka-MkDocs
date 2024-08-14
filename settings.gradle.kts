@@ -54,6 +54,7 @@ include(
 	"renderer",
 
 	"example:example-core",
+	"example:example-app",
 
 	"gradle:templates:template-app",
 	"gradle:templates:template-lib",

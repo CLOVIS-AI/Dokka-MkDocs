@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
 	dokkatoo(projects.example.exampleCore)
+	dokkatoo(projects.example.exampleApp)
 }
