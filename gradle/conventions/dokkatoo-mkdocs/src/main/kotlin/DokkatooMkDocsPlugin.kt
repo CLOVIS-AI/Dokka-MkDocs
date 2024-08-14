@@ -16,7 +16,10 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 
 		val dokkatooMkdocsModuleOutputDirectoriesResolver by target.configurations.getting
 
-		val embedDokkaIntoMkDocs by target.tasks.registering(Sync::class) {
+		val dokkatooCopyIntoMkDocs by target.tasks.registering(Sync::class) {
+			group = "dokkatoo"
+			description = "Copies the Dokkatoo pages into the website."
+
 			from(dokkatooMkdocsModuleOutputDirectoriesResolver)
 			into(target.layout.dir(target.provider { File("docs/api") }))
 
@@ -26,6 +29,13 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 
 			includeEmptyDirs = true
 			duplicatesStrategy = DuplicatesStrategy.WARN //TODO make each module generate files in its own directory, afterwards remove this
+		}
+
+		val embedDokkaIntoMkDocs by target.tasks.registering {
+			group = "dokkatoo"
+			description = "Lifecycle task to embed configured Dokkatoo modules into a Material for MkDocs website"
+
+			dependsOn(dokkatooCopyIntoMkDocs)
 		}
 	}
 
