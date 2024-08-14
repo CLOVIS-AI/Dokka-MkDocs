@@ -427,6 +427,9 @@ open class MkDocsRenderer(
 	private fun List<Pair<ContentDivergentInstance, DisplaySourceSet>>.getInstanceAndSourceSets() =
 		this.let { Pair(it.first().first, it.map { it.second }.toSet()) }
 
-	private fun StringBuilder.buildSourceSetTags(sourceSets: Set<DisplaySourceSet>) =
-		append(sourceSets.joinToString(prefix = "[", postfix = "]") { it.name })
+	private fun StringBuilder.buildSourceSetTags(sourceSets: Set<DisplaySourceSet>) {
+		for (sourceSet in sourceSets) {
+			append("<span class=\"md-typeset md-tag\">${sourceSet.name}</span>")
+		}
+	}
 }
