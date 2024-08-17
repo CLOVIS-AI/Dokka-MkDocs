@@ -1,6 +1,8 @@
 package opensavvy.dokka.material.mkdocs.renderer
 
+import opensavvy.dokka.material.mkdocs.GfmCommand.Companion.templateCommand
 import opensavvy.dokka.material.mkdocs.MaterialForMkDocsPlugin
+import opensavvy.dokka.material.mkdocs.ResolveLinkGfmCommand
 import org.jetbrains.dokka.DokkaException
 import org.jetbrains.dokka.base.renderers.DefaultRenderer
 import org.jetbrains.dokka.model.DisplaySourceSet
@@ -32,16 +34,68 @@ open class MkDocsRenderer2(
 	}
 
 	override fun StringBuilder.buildNavigation(page: PageNode) {
-		appendLine("NAVIGATION NODE $page\n")
+		var first = true
+
+		locationProvider.ancestors(page).asReversed()
+			.filter { it.name.isNotBlank() }
+			.forEach { node ->
+				if (first) {
+					first = false
+				} else {
+					append(" • ")
+				}
+
+				if (node.isNavigable) buildLink(node, page)
+				else append(node.name)
+			}
+
+		appendLine()
+		appendLine()
 	}
 
 	override fun StringBuilder.buildList(node: ContentList, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
 		appendLine("LIST NODES $node\n")
 	}
 
+	// region Links
+
+	private fun StringBuilder.buildLink(to: PageNode, from: PageNode) =
+		buildLink(locationProvider.resolve(to, from, skipExtension = true)!! + ".html") {
+			append(to.name)
+		}
+
 	override fun StringBuilder.buildLink(address: String, content: StringBuilder.() -> Unit) {
-		appendLine("LINK NODE $address\n")
+		append("<a href=\"$address\">\n")
+		content()
+		append("\n</a>")
 	}
+
+	override fun StringBuilder.buildDRILink(
+		node: ContentDRILink,
+		pageContext: ContentPage,
+		sourceSetRestriction: Set<DisplaySourceSet>?,
+	) {
+		val location = locationProvider.resolve(node.address, node.sourceSets, pageContext)
+			?.removeSuffix(".md")
+			?.plus(".html")
+		if (location == null) {
+			val isPartial = context.configuration.delayTemplateSubstitution
+
+			if (isPartial) {
+				templateCommand(ResolveLinkGfmCommand(node.address)) {
+					buildText(node.children, pageContext, sourceSetRestriction)
+				}
+			} else {
+				buildText(node.children, pageContext, sourceSetRestriction)
+			}
+		} else {
+			buildLink(location) {
+				buildText(node.children, pageContext, sourceSetRestriction)
+			}
+		}
+	}
+
+	// endregion
 
 	override fun StringBuilder.buildLineBreak() {
 		appendLine("<br/>")
@@ -97,3 +151,6 @@ open class MkDocsRenderer2(
 
 	// endregion
 }
+
+private val PageNode.isNavigable: Boolean
+	get() = this !is RendererSpecificPage || strategy != RenderingStrategy.DoNothing
