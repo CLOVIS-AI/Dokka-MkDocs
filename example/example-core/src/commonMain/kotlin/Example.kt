@@ -33,4 +33,11 @@ class Example {
 	fun foo(bar: String): Boolean {
 		TODO()
 	}
+
+	/**
+	 * Some other documentation.
+	 */
+	fun foo(number: Int): Boolean {
+		TODO()
+	}
 }
