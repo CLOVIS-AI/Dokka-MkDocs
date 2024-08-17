@@ -204,7 +204,22 @@ open class MkDocsRenderer(
 		sourceSetRestriction: Set<DisplaySourceSet>?,
 	) {
 		buildNewLine()
-		if (node.dci.kind == ContentKind.Sample || node.dci.kind == ContentKind.Parameters) {
+
+		if (node.dci.kind == ContentKind.Parameters) {
+			appendLine("\n<dl>")
+			for (parameter in node.children) {
+				val (name, description) = parameter.children
+				name as ContentText
+				description as ContentGroup
+				appendLine("<dt><strong>\n")
+				buildText(name)
+				appendLine("\n\n</strong>\n</dt><dd>\n")
+				buildText(description.children, pageContext, sourceSetRestriction)
+				appendLine("\n\n</dd>")
+			}
+
+			appendLine("</dl>")
+		} else if (node.dci.kind == ContentKind.Sample) {
 			node.sourceSets.forEach { sourcesetData ->
 				append(sourcesetData.name)
 				buildNewLine()
