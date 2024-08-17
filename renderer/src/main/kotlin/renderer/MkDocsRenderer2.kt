@@ -121,6 +121,19 @@ open class MkDocsRenderer2(
 			?.forEach {
 				appendLine(" - $it")
 			}
+		page.content
+			.children
+			.flatMap {
+				if (it is ContentGroup)
+					it.children
+				else listOf(it)
+			}
+			.filterIsInstance<ContentHeader>()
+			.firstOrNull { it.level == 1 }
+			?.children
+			?.filterIsInstance<ContentText>()
+			?.joinToString(" ") { it.text }
+			?.also { appendLine("title: $it") }
 		appendLine("---")
 
 		// Navigation
