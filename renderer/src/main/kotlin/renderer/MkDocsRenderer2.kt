@@ -107,6 +107,29 @@ open class MkDocsRenderer2(
 
 	// region Overall page rendering
 
+	/**
+	 * Overall layout of each page.
+	 */
+	override fun buildPageContent(context: StringBuilder, page: ContentPage) = with(context) {
+		// Front matter
+		appendLine("---")
+		appendLine("tags:")
+		(page as? WithDocumentables)
+			?.documentables
+			?.flatMapTo(HashSet()) { it.sourceSets }
+			?.map { it.analysisPlatform.key }
+			?.forEach {
+				appendLine(" - $it")
+			}
+		appendLine("---")
+
+		// Navigation
+		context.buildNavigation(page)
+
+		// Contents
+		page.content.build(context, page)
+	}
+
 	override suspend fun renderPage(page: PageNode) {
 		val path by lazy {
 			locationProvider.resolve(page, skipExtension = true)

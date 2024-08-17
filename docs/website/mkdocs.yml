@@ -63,6 +63,7 @@ plugins:
   - social
   - search
   - privacy
+  - tags
 
 markdown_extensions:
   - admonition
