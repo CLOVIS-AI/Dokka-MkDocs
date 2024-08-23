@@ -33,13 +33,10 @@ open class MkDocsRenderer2(
 
 			childrenCallback()
 		}
-
-		appendLine()
-		appendLine()
 	}
 
 	override fun StringBuilder.buildCodeBlock(code: ContentCodeBlock, pageContext: ContentPage) {
-		append("```")
+		append("\n```")
 		append(code.language.ifEmpty { "kotlin" })
 		appendLine()
 		code.children.forEach {
