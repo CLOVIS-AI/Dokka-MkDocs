@@ -21,8 +21,25 @@ open class MkDocsRenderer2(
 		context.logger.warn("MkDocs renderer has encountered problem. The unmatched node is $node")
 	}
 
+	override fun StringBuilder.wrapGroup(node: ContentGroup, pageContext: ContentPage, childrenCallback: StringBuilder.() -> Unit) {
+		// appendLine("\n\nSTART OF CONTENT GROUP $node\n")
+
+		val styles = decorations.fromGroupStyles(node.style)
+
+		styles.iterator().wrapIn(this) {
+			childrenCallback()
+		}
+
+		appendLine()
+		appendLine()
+	}
+
 	override fun StringBuilder.buildText(textNode: ContentText) {
-		appendLine("TEXT NODE $textNode\n")
+		val styles = decorations.fromInlineStyles(textNode.style)
+
+		styles.iterator().wrapIn(this) {
+			append(textNode.text)
+		}
 	}
 
 	override fun StringBuilder.buildTable(node: ContentTable, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
@@ -65,9 +82,9 @@ open class MkDocsRenderer2(
 		}
 
 	override fun StringBuilder.buildLink(address: String, content: StringBuilder.() -> Unit) {
-		append("<a href=\"$address\">\n")
+		append("<a href=\"$address\">")
 		content()
-		append("\n</a>")
+		append("</a>")
 	}
 
 	override fun StringBuilder.buildDRILink(
@@ -102,7 +119,20 @@ open class MkDocsRenderer2(
 	}
 
 	override fun StringBuilder.buildHeader(level: Int, node: ContentHeader, content: StringBuilder.() -> Unit) {
-		appendLine("HEADER $node\n")
+		val decorator = when (level) {
+			1 -> Decoration.ofElement("h1")
+			2 -> Decoration.ofElement("h2")
+			3 -> Decoration.ofElement("h3")
+			4 -> Decoration.ofElement("h4")
+			5 -> Decoration.ofElement("h5")
+			else -> Decoration.ofElement("h6")
+		}
+
+		decorator.wrapIn(this) {
+			content()
+		}
+
+		appendLine()
 	}
 
 	// region Overall page rendering
