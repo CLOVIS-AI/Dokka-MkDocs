@@ -38,6 +38,32 @@ open class MkDocsRenderer2(
 		appendLine()
 	}
 
+	override fun StringBuilder.buildCodeBlock(code: ContentCodeBlock, pageContext: ContentPage) {
+		append("```")
+		append(code.language.ifEmpty { "kotlin" })
+		appendLine()
+		code.children.forEach {
+			if (it is ContentText) {
+				// since this is a code block where text will be rendered as is,
+				// no need to escape text, apply styles, etc. Just need the plain value
+				append(it.text)
+			} else if (it is ContentBreakLine) {
+				// since this is a code block where text will be rendered as is,
+				// there's no need to add tailing slash for line breaks
+				appendLine()
+			}
+		}
+		appendLine()
+		append("```")
+		appendLine()
+	}
+
+	override fun StringBuilder.buildCodeInline(code: ContentCodeInline, pageContext: ContentPage) {
+		append("`")
+		code.children.filterIsInstance<ContentText>().forEach { append(it.text) }
+		append("`")
+	}
+
 	override fun StringBuilder.buildText(textNode: ContentText) {
 		val styles = decorations.fromInlineStyles(textNode.style)
 
