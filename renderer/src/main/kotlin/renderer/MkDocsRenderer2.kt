@@ -22,11 +22,10 @@ open class MkDocsRenderer2(
 	}
 
 	override fun StringBuilder.wrapGroup(node: ContentGroup, pageContext: ContentPage, childrenCallback: StringBuilder.() -> Unit) {
-		// appendLine("\n\nSTART OF CONTENT GROUP $node\n")
-
 		val styles = decorations.fromGroupStyles(node.style)
 
 		styles.iterator().wrapIn(this) {
+			buildComment { "CONTENT GROUP $node" }
 			childrenCallback()
 		}
 
@@ -38,16 +37,17 @@ open class MkDocsRenderer2(
 		val styles = decorations.fromInlineStyles(textNode.style)
 
 		styles.iterator().wrapIn(this) {
+			buildComment { "TEXT $textNode" }
 			append(textNode.text)
 		}
 	}
 
 	override fun StringBuilder.buildTable(node: ContentTable, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
-		appendLine("TABLE NODE $node\n")
+		buildComment { "TABLE NODE $node" }
 	}
 
 	override fun StringBuilder.buildResource(node: ContentEmbeddedResource, pageContext: ContentPage) {
-		appendLine("RESOURCE NODE $node\n")
+		buildComment { "RESOURCE NODE $node" }
 	}
 
 	override fun StringBuilder.buildNavigation(page: PageNode) {
@@ -71,7 +71,7 @@ open class MkDocsRenderer2(
 	}
 
 	override fun StringBuilder.buildList(node: ContentList, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
-		appendLine("LIST NODES $node\n")
+		buildComment { "LIST NODE $node" }
 	}
 
 	// region Links
@@ -129,6 +129,7 @@ open class MkDocsRenderer2(
 		}
 
 		decorator.wrapIn(this) {
+			buildComment { "HEADER $node" }
 			content()
 		}
 
@@ -216,6 +217,12 @@ open class MkDocsRenderer2(
 		}.trim().replace("\n[\n]+".toRegex(), "\n\n")
 
 	// endregion
+
+	private inline fun StringBuilder.buildComment(content: () -> String) {
+		append("<!-- ")
+		append(content())
+		append(" -->")
+	}
 }
 
 private val PageNode.isNavigable: Boolean
