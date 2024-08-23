@@ -246,10 +246,14 @@ open class MkDocsRenderer2(
 
 	// endregion
 
+	private val INSERT_COMMENTS = true
+
 	private inline fun StringBuilder.buildComment(content: () -> String) {
-		append("<!-- ")
-		append(content())
-		append(" -->")
+		if (INSERT_COMMENTS) {
+			append("<!-- ")
+			append(content())
+			append(" -->")
+		}
 	}
 
 	fun StringBuilder.buildPlatformMarkers(sourceSets: Iterable<DisplaySourceSet>) {
