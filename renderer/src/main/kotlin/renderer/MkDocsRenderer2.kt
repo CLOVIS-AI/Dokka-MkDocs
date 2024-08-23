@@ -24,6 +24,10 @@ open class MkDocsRenderer2(
 	override fun StringBuilder.wrapGroup(node: ContentGroup, pageContext: ContentPage, childrenCallback: StringBuilder.() -> Unit) {
 		val styles = decorations.fromGroupStyles(node.style)
 
+		if (node.dci.kind == ContentKind.Main && node.children.firstOrNull()?.dci?.kind == ContentKind.Symbol) {
+			appendLine("***")
+		}
+
 		styles.iterator().wrapIn(this) {
 			buildComment { "CONTENT GROUP $node" }
 
