@@ -26,6 +26,11 @@ open class MkDocsRenderer2(
 
 		styles.iterator().wrapIn(this) {
 			buildComment { "CONTENT GROUP $node" }
+
+			if (ContentKind.shouldBePlatformTagged(node.dci.kind)) {
+				buildPlatformMarkers(node.sourceSets)
+			}
+
 			childrenCallback()
 		}
 
@@ -222,6 +227,12 @@ open class MkDocsRenderer2(
 		append("<!-- ")
 		append(content())
 		append(" -->")
+	}
+
+	fun StringBuilder.buildPlatformMarkers(sourceSets: Iterable<DisplaySourceSet>) {
+		for (sourceSet in sourceSets) {
+			append("<span class=\"md-typeset md-tag\">${sourceSet.name}</span>")
+		}
 	}
 }
 
