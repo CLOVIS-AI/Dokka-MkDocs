@@ -21,16 +21,65 @@ open class MkDocsRenderer2(
 		context.logger.warn("MkDocs renderer has encountered problem. The unmatched node is $node")
 	}
 
+	override fun StringBuilder.wrapGroup(node: ContentGroup, pageContext: ContentPage, childrenCallback: StringBuilder.() -> Unit) {
+		val styles = decorations.fromGroupStyles(node.style)
+
+		if (node.dci.kind == ContentKind.Main && node.children.firstOrNull()?.dci?.kind == ContentKind.Symbol) {
+			appendLine("***")
+		}
+
+		styles.iterator().wrapIn(this) {
+			buildComment { "CONTENT GROUP $node" }
+
+			if (ContentKind.shouldBePlatformTagged(node.dci.kind)) {
+				buildPlatformMarkers(node.sourceSets)
+			}
+
+			childrenCallback()
+		}
+	}
+
+	override fun StringBuilder.buildCodeBlock(code: ContentCodeBlock, pageContext: ContentPage) {
+		append("\n```")
+		append(code.language.ifEmpty { "kotlin" })
+		appendLine()
+		code.children.forEach {
+			if (it is ContentText) {
+				// since this is a code block where text will be rendered as is,
+				// no need to escape text, apply styles, etc. Just need the plain value
+				append(it.text)
+			} else if (it is ContentBreakLine) {
+				// since this is a code block where text will be rendered as is,
+				// there's no need to add tailing slash for line breaks
+				appendLine()
+			}
+		}
+		appendLine()
+		append("```")
+		appendLine()
+	}
+
+	override fun StringBuilder.buildCodeInline(code: ContentCodeInline, pageContext: ContentPage) {
+		append("`")
+		code.children.filterIsInstance<ContentText>().forEach { append(it.text) }
+		append("`")
+	}
+
 	override fun StringBuilder.buildText(textNode: ContentText) {
-		appendLine("TEXT NODE $textNode\n")
+		val styles = decorations.fromInlineStyles(textNode.style)
+
+		styles.iterator().wrapIn(this) {
+			buildComment { "TEXT $textNode" }
+			append(textNode.text)
+		}
 	}
 
 	override fun StringBuilder.buildTable(node: ContentTable, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
-		appendLine("TABLE NODE $node\n")
+		buildComment { "TABLE NODE $node" }
 	}
 
 	override fun StringBuilder.buildResource(node: ContentEmbeddedResource, pageContext: ContentPage) {
-		appendLine("RESOURCE NODE $node\n")
+		buildComment { "RESOURCE NODE $node" }
 	}
 
 	override fun StringBuilder.buildNavigation(page: PageNode) {
@@ -54,7 +103,7 @@ open class MkDocsRenderer2(
 	}
 
 	override fun StringBuilder.buildList(node: ContentList, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
-		appendLine("LIST NODES $node\n")
+		buildComment { "LIST NODE $node" }
 	}
 
 	// region Links
@@ -65,9 +114,9 @@ open class MkDocsRenderer2(
 		}
 
 	override fun StringBuilder.buildLink(address: String, content: StringBuilder.() -> Unit) {
-		append("<a href=\"$address\">\n")
+		append("<a href=\"$address\">")
 		content()
-		append("\n</a>")
+		append("</a>")
 	}
 
 	override fun StringBuilder.buildDRILink(
@@ -102,7 +151,21 @@ open class MkDocsRenderer2(
 	}
 
 	override fun StringBuilder.buildHeader(level: Int, node: ContentHeader, content: StringBuilder.() -> Unit) {
-		appendLine("HEADER $node\n")
+		val decorator = when (level) {
+			1 -> Decoration.ofElement("h1")
+			2 -> Decoration.ofElement("h2")
+			3 -> Decoration.ofElement("h3")
+			4 -> Decoration.ofElement("h4")
+			5 -> Decoration.ofElement("h5")
+			else -> Decoration.ofElement("h6")
+		}
+
+		decorator.wrapIn(this) {
+			buildComment { "HEADER $node" }
+			content()
+		}
+
+		appendLine()
 	}
 
 	// region Overall page rendering
@@ -186,6 +249,22 @@ open class MkDocsRenderer2(
 		}.trim().replace("\n[\n]+".toRegex(), "\n\n")
 
 	// endregion
+
+	private val INSERT_COMMENTS = true
+
+	private inline fun StringBuilder.buildComment(content: () -> String) {
+		if (INSERT_COMMENTS) {
+			append("<!-- ")
+			append(content())
+			append(" -->")
+		}
+	}
+
+	fun StringBuilder.buildPlatformMarkers(sourceSets: Iterable<DisplaySourceSet>) {
+		for (sourceSet in sourceSets) {
+			append("<span class=\"md-typeset md-tag\">${sourceSet.name}</span>")
+		}
+	}
 }
 
 private val PageNode.isNavigable: Boolean
