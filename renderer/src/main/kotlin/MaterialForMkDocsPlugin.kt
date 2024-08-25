@@ -2,7 +2,7 @@ package opensavvy.dokka.material.mkdocs
 
 import opensavvy.dokka.material.mkdocs.location.MarkdownLocationProvider
 import opensavvy.dokka.material.mkdocs.renderer.BriefCommentPreprocessor
-import opensavvy.dokka.material.mkdocs.renderer.CommonmarkRenderer
+import opensavvy.dokka.material.mkdocs.renderer.MkDocsRenderer
 import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.base.renderers.PackageListCreator
@@ -21,7 +21,7 @@ class MaterialForMkDocsPlugin : DokkaPlugin() {
 	val dokkaBase by lazy { plugin<DokkaBase>() }
 
 	val renderer: Extension<Renderer, *, *> by extending {
-		CoreExtensions.renderer providing ::CommonmarkRenderer override dokkaBase.htmlRenderer
+		CoreExtensions.renderer providing ::MkDocsRenderer override dokkaBase.htmlRenderer
 	}
 
 	val locationProvider: Extension<LocationProviderFactory, *, *> by extending {
