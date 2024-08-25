@@ -63,6 +63,7 @@ plugins:
   - social
   - search
   - privacy
+  - tags
 
 markdown_extensions:
   - admonition
@@ -102,5 +103,5 @@ nav:
               - api/example-core/opensavvy.dokka.material.mkdocs.example/index.md
               - Example:
                   - api/example-core/opensavvy.dokka.material.mkdocs.example/-example/index.md
-                  - foo: api/example-core/opensavvy.dokka.material.mkdocs.example/-example/foo.md
-                  - Example: api/example-core/opensavvy.dokka.material.mkdocs.example/-example/-example.md
+                  - api/example-core/opensavvy.dokka.material.mkdocs.example/-example/foo.md
+                  - api/example-core/opensavvy.dokka.material.mkdocs.example/-example/-example.md
