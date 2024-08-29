@@ -79,11 +79,35 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 			}
 		}
 
+		val mkdocsYaml = target.layout.projectDirectory.file("mkdocs.yml")
+		val embedMkDocsNavigation by target.tasks.registering {
+			group = "dokkatoo"
+			description = "Adds all the generated files to the index of the MkDocs site"
+
+			inputs.files(generateMkDocsNavigation)
+			inputs.file(mkdocsYaml)
+			outputs.file(mkdocsYaml)
+
+			doLast {
+				val startMarker = "# !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #"
+				val endMarker = "# !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #"
+
+				val lines = mkdocsYaml.asFile.readLines()
+				val start = lines.takeWhile { it != startMarker }
+				val end = lines.takeLastWhile { it != endMarker }
+
+				val embeds = navOutput.get().asFile.readLines()
+
+				val output = start + startMarker + embeds + endMarker + end
+				mkdocsYaml.asFile.writeText(output.joinToString(System.lineSeparator()) + System.lineSeparator())
+			}
+		}
+
 		val embedDokkaIntoMkDocs by target.tasks.registering {
 			group = "dokkatoo"
 			description = "Lifecycle task to embed configured Dokkatoo modules into a Material for MkDocs website"
 
-			dependsOn(dokkatooCopyIntoMkDocs, generateMkDocsNavigation)
+			dependsOn(dokkatooCopyIntoMkDocs, embedMkDocsNavigation)
 		}
 	}
 
