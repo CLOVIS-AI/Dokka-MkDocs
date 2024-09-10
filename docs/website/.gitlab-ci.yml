@@ -1,19 +1,15 @@
 
 mkdocs:
-  image:
-    name: squidfunk/mkdocs-material
-    entrypoint: [ "/bin/sh", "-c" ]
+  image: registry.gitlab.com/opensavvy/automation/containers/mkdocs:latest
   stage: build
+  extends: [ .os.gradle ]
 
-  before_script:
+  script:
+    - ./gradlew :docs:website:embedDokkaIntoMkDocs -PappVersion=$project_version
     - cd docs/website
-    - ls
     - 'echo "repo_url: $CI_PROJECT_URL">>mkdocs.yml'
     - 'echo "repo_name: $CI_PROJECT_TITLE">>mkdocs.yml'
     - 'echo "repo_pages: $CI_PAGES_URL">>mkdocs.yml'
-
-  script:
-    - pwd
     - mkdocs build --site-dir ../../docs-website
 
   after_script:
