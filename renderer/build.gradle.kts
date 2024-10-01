@@ -1,9 +1,7 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
 	alias(opensavvyConventions.plugins.base)
 	kotlin("jvm")
+	id("maven-publish")
 	alias(opensavvyConventions.plugins.kotlin.abstractLibrary)
 }
 
@@ -14,6 +12,14 @@ kotlin {
 dependencies {
 	compileOnly(libs.dokka.base)
 	compileOnly(libs.dokka.core)
+}
+
+publishing {
+	publications {
+		register<MavenPublication>("renderer") {
+			from(components["java"])
+		}
+	}
 }
 
 library {
