@@ -5,7 +5,7 @@ mkdocs:
   extends: [ .os.gradle ]
 
   script:
-    - ./gradlew :docs:website:embedDokkaIntoMkDocs -PappVersion=$project_version
+    - ./gradlew -p docs website:embedDokkaIntoMkDocs -PappVersion=$project_version
     - cd docs/website
     - 'echo "repo_url: $CI_PROJECT_URL">>mkdocs.yml'
     - 'echo "repo_name: $CI_PROJECT_TITLE">>mkdocs.yml'
