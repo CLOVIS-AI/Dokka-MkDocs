@@ -29,6 +29,8 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 				path = path.removePrefix("module/")
 			}
 
+			exclude("includes/*")
+
 			includeEmptyDirs = true
 			duplicatesStrategy = DuplicatesStrategy.WARN // TODO make each module generate files in its own directory, afterwards remove this
 		}
