@@ -41,3 +41,10 @@ class Example {
 		TODO()
 	}
 }
+
+/**
+ * This is a top-level function.
+ */
+fun topLevelFunction(): Int {
+	TODO()
+}
