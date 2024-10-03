@@ -14,3 +14,7 @@ kotlin {
 		implementation(projects.example.exampleCore)
 	}
 }
+
+dokkatoo {
+	moduleName.set("Example app")
+}

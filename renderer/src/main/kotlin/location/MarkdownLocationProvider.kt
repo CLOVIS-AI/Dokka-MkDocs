@@ -28,7 +28,7 @@ class MarkdownLocationProvider(
 		val default = super.pathTo(node, context)
 
 		return when (node) {
-			is ModulePageNode -> "${dokkaContext.configuration.moduleName}/$default"
+			is ModulePageNode -> "${dokkaContext.configuration.moduleName.map { if (it.isUpperCase()) "-${it.lowercase()}" else it }.joinToString("")}/$default"
 			else -> {
 				return default
 				error(
