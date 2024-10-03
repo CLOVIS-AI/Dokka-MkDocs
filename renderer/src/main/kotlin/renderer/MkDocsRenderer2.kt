@@ -5,6 +5,7 @@ import opensavvy.dokka.material.mkdocs.MaterialForMkDocsPlugin
 import opensavvy.dokka.material.mkdocs.ResolveLinkGfmCommand
 import org.jetbrains.dokka.DokkaException
 import org.jetbrains.dokka.base.renderers.DefaultRenderer
+import org.jetbrains.dokka.links.PointingToDeclaration
 import org.jetbrains.dokka.model.DisplaySourceSet
 import org.jetbrains.dokka.pages.*
 import org.jetbrains.dokka.plugability.DokkaContext
@@ -76,6 +77,25 @@ open class MkDocsRenderer2(
 
 	override fun StringBuilder.buildTable(node: ContentTable, pageContext: ContentPage, sourceSetRestriction: Set<DisplaySourceSet>?) {
 		buildComment { "TABLE NODE $node" }
+
+		when (node.dci.kind) {
+			ContentKind.Packages -> {
+				for (pkg in node.children) {
+					for (child in pkg.children) {
+						when (child) {
+							is ContentDRILink -> {
+								appendLine("<h3>")
+								buildDRILink(child, pageContext, sourceSetRestriction)
+								appendLine("</h3>")
+							}
+							else -> {
+								buildContentNode(child, pageContext, sourceSetRestriction)
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	override fun StringBuilder.buildResource(node: ContentEmbeddedResource, pageContext: ContentPage) {
@@ -124,7 +144,7 @@ open class MkDocsRenderer2(
 		pageContext: ContentPage,
 		sourceSetRestriction: Set<DisplaySourceSet>?,
 	) {
-		val location = locationProvider.resolve(node.address, node.sourceSets, pageContext)
+		var location = locationProvider.resolve(node.address, node.sourceSets, pageContext)
 			?.removeSuffix(".md")
 			?.plus(".html")
 		if (location == null) {
@@ -138,6 +158,13 @@ open class MkDocsRenderer2(
 				buildText(node.children, pageContext, sourceSetRestriction)
 			}
 		} else {
+			if (node.address.packageName != null && node.address.classNames == null && node.address.callable == null && node.address.target == PointingToDeclaration) {
+				// We're reading a package definition.
+				// For some reason, Dokka generates a full path for them,
+
+				location = location.replaceBefore("/", "").removePrefix("/")
+			}
+
 			buildLink(location) {
 				buildText(node.children, pageContext, sourceSetRestriction)
 			}

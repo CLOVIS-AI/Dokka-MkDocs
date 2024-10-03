@@ -19,3 +19,6 @@ Module pages can have subheaders to describe multiple sections of content.
 # Package opensavvy.dokka.material.mkdocs.example
 
 This is the description of a package.
+
+The description may be arbitrary long, but only the first paragraph is displayed in the module page.
+However, it is contained in its entirety in the package page.
