@@ -84,9 +84,9 @@ open class MkDocsRenderer2(
 					for (child in pkg.children) {
 						when (child) {
 							is ContentDRILink -> {
-								appendLine("<h3>")
-								buildDRILink(child, pageContext, sourceSetRestriction)
-								appendLine("</h3>")
+								buildHeader(3, ContentHeader(listOf(child), 3, child.dci, child.sourceSets, child.style, child.extra)) {
+									buildDRILink(child, pageContext, sourceSetRestriction)
+								}
 							}
 							else -> {
 								buildContentNode(child, pageContext, sourceSetRestriction)
