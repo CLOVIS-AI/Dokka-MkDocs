@@ -92,18 +92,4 @@ nav:
       - reference.md
 
 # !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #
-  - Reference:
-      - example-core:
-          - api/example-core/index.md
-          - opensavvy.dokka.material.mkdocs.example:
-              - api/example-core/opensavvy.dokka.material.mkdocs.example/index.md
-              - Example:
-                  - api/example-core/opensavvy.dokka.material.mkdocs.example/-example/index.md
-                  - api/example-core/opensavvy.dokka.material.mkdocs.example/-example/-example.md
-                  - api/example-core/opensavvy.dokka.material.mkdocs.example/-example/foo.md
-      - example-app:
-          - api/example-app/index.md
-          - opensavvy.dokka.material.mkdocs.example:
-              - api/example-app/opensavvy.dokka.material.mkdocs.example/index.md
-              - api/example-app/opensavvy.dokka.material.mkdocs.example/main.md
 # !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #
