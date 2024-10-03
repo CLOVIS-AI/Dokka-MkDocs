@@ -179,12 +179,12 @@ open class MkDocsRenderer2(
 
 	override fun StringBuilder.buildHeader(level: Int, node: ContentHeader, content: StringBuilder.() -> Unit) {
 		val decorator = when (level) {
-			1 -> Decoration.ofElement("h1")
-			2 -> Decoration.ofElement("h2")
-			3 -> Decoration.ofElement("h3")
-			4 -> Decoration.ofElement("h4")
-			5 -> Decoration.ofElement("h5")
-			else -> Decoration.ofElement("h6")
+			1 -> Decoration.ofPrefix("# ")
+			2 -> Decoration.ofPrefix("## ")
+			3 -> Decoration.ofPrefix("### ")
+			4 -> Decoration.ofPrefix("#### ")
+			5 -> Decoration.ofPrefix("##### ")
+			else -> Decoration.ofPrefix("###### ")
 		}
 
 		decorator.wrapIn(this) {

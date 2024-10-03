@@ -25,6 +25,12 @@ fun interface Decoration {
 				append("</$elementName>")
 			}
 
+		fun ofPrefix(prefix: String) =
+			Decoration { content ->
+				append(prefix)
+				content()
+			}
+
 		val NoOp = Decoration {content ->
 			content()
 		}
