@@ -63,7 +63,7 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 
 						when {
 							file == root -> {
-								builder.appendLine("  - Reference:")
+								builder.appendLine("  - Reference (experimental):")
 							}
 
 							file.isDirectory -> {
