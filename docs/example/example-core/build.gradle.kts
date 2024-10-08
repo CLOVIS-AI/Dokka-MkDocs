@@ -10,3 +10,11 @@ kotlin {
 		nodejs()
 	}
 }
+
+dokkatoo {
+	moduleName.set("Library module")
+
+	dokkatooSourceSets.configureEach {
+		includes.from("README.md")
+	}
+}
