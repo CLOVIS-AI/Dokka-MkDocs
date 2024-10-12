@@ -5,6 +5,10 @@ plugins {
 	alias(opensavvyConventions.plugins.kotlin.abstractLibrary)
 }
 
+java {
+	withSourcesJar()
+}
+
 kotlin {
 	jvmToolchain(8)
 }
