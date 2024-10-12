@@ -86,7 +86,8 @@ use_directory_urls: false
 nav:
   - Home: index.md
 
-  - Getting started: []
+  - Getting started:
+      - setup.md
 
   - Plugin reference:
       - reference.md
