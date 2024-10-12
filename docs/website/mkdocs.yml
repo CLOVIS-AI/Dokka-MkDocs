@@ -1,7 +1,7 @@
-site_name: OpenSavvy Playground
+site_name: Dokka in Material for MkDocs
 site_author: OpenSavvy & contributors
 site_description: >
-  Project template with CI/CD and IDE configuration.
+  Embed your Kotlin documentation comments into a Material for MkDocs site
 
 theme:
   name: material
