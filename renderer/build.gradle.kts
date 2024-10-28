@@ -27,7 +27,7 @@ publishing {
 }
 
 library {
-	name.set("Dokka render for Material for MkDocs")
+	name.set("Dokka renderer for Material for MkDocs")
 	description.set("Dokka plugin that adds the Material for MkDocs format")
 	homeUrl.set("https://gitlab.com/opensavvy/automation/dokka-material-mkdocs")
 
