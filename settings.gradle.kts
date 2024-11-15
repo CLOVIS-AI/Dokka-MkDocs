@@ -55,6 +55,7 @@ plugins {
 include(
 	"renderer",
 	"dokkatoo-mkdocs",
+	"dokka-mkdocs",
 
 	"gradle:templates:template-app",
 	"gradle:templates:template-lib",

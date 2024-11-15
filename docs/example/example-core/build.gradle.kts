@@ -1,6 +1,6 @@
 plugins {
 	kotlin("multiplatform")
-	id("dev.opensavvy.dokkatoo-mkdocs") version "VERSION HERE"
+	id("dev.opensavvy.dokka-mkdocs") version "VERSION HERE"
 }
 
 kotlin {
@@ -11,10 +11,10 @@ kotlin {
 	}
 }
 
-dokkatoo {
+dokka {
 	moduleName.set("Library module")
 
-	dokkatooSourceSets.configureEach {
+	dokkaSourceSets.configureEach {
 		includes.from("README.md")
 	}
 }
