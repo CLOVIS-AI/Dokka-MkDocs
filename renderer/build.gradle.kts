@@ -29,7 +29,7 @@ publishing {
 library {
 	name.set("Dokka renderer for Material for MkDocs")
 	description.set("Dokka plugin that adds the Material for MkDocs format")
-	homeUrl.set("https://gitlab.com/opensavvy/automation/dokka-material-mkdocs")
+	homeUrl.set("https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/")
 
 	license.set {
 		name.set("Apache 2.0")
