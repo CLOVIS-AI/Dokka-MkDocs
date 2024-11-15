@@ -19,7 +19,7 @@ gradlePlugin {
 }
 
 library {
-	name.set("Dokkatoo Material for MkDocs format")
+	name.set("Dokkatoo: Material for MkDocs format")
 	description.set("Gradle plugin to add the Material for MkDocs format to Dokkatoo")
 	homeUrl.set("https://gitlab.com/opensavvy/automation/dokka-material-mkdocs")
 
