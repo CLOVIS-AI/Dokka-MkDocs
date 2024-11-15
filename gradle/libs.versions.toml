@@ -1,8 +1,8 @@
 # List of dependencies of the project
 
 [versions]
-dokka = "1.9.20"    # https://github.com/Kotlin/dokka/releases
-dokkatoo = "2.3.1"  # https://github.com/adamko-dev/dokkatoo/releases
+dokka = "2.0.0-Beta"     # https://github.com/Kotlin/dokka/releases
+dokkatoo = "2.3.1"       # https://github.com/adamko-dev/dokkatoo/releases
 
 [plugins]
 
