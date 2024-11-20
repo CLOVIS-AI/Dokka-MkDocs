@@ -1,9 +1,9 @@
 plugins {
 	alias(opensavvyConventions.plugins.base)
-	id("dev.opensavvy.dokkatoo-mkdocs") version "VERSION HERE"
+	id("dev.opensavvy.dokka-mkdocs") version "VERSION HERE"
 }
 
 dependencies {
-	dokkatoo(projects.example.exampleCore)
-	dokkatoo(projects.example.exampleApp)
+	dokka(projects.example.exampleCore)
+	dokka(projects.example.exampleApp)
 }

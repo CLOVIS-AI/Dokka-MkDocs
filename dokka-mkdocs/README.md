@@ -1,22 +1,22 @@
-# Module Dokkatoo: Material for MkDocs format
+# Module Dokka: Material for MkDocs format
 
-Gradle plugin to configure Dokkatoo with Material for MkDocs.
+Gradle plugin to configure Dokka 2+ with Material for MkDocs.
 
-<a href="https://search.maven.org/search?q=g:%22dev.opensavvy.dokka.mkdocs%22%20AND%20a:%22dokkatoo-mkdocs%22"><img src="https://img.shields.io/maven-central/v/dev.opensavvy.dokka.mkdocs/dokkatoo-mkdocs.svg?label=Maven%20Central"></a>
+<a href="https://search.maven.org/search?q=g:%22dev.opensavvy.dokka.mkdocs%22%20AND%20a:%22dokka-mkdocs%22"><img src="https://img.shields.io/maven-central/v/dev.opensavvy.dokka.mkdocs/dokka-mkdocs.svg?label=Maven%20Central"></a>
 <a href="https://opensavvy.dev/open-source/stability.html"><img src="https://badgen.net/static/Stability/alpha/purple"></a>
-<a href="https://javadoc.io/doc/dev.opensavvy.dokka.mkdocs/dokkatoo-mkdocs"><img src="https://badgen.net/static/Other%20versions/javadoc.io/blue"></a>
+<a href="https://javadoc.io/doc/dev.opensavvy.dokka.mkdocs/dokka-mkdocs"><img src="https://badgen.net/static/Other%20versions/javadoc.io/blue"></a>
 
-This is a Gradle plugin using [Dokkatoo](https://github.com/adamko-dev/dokkatoo) to extract Kotlin documentation and embed it in a Material for MkDocs site. To learn more about the project, see [the documentation](https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/).
+This is a Gradle plugin using Dokka to extract Kotlin documentation and embed it in a Material for MkDocs site. To learn more about the project, see [the documentation](https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/).
 
 ## Configuration
 
 Create a `build.gradle.kts` file in the same directory as your `mkdocs.yml` file:
 ```kotlin
-id("dev.opensavvy.dokkatoo-mkdocs") version "VERSION HERE" 
+id("dev.opensavvy.dokka-mkdocs") version "VERSION HERE" 
 
 dependencies {
     // Embeds the documentation from project :foo-bar
-    dokkatoo(project("foo-bar"))
+    dokka(project("foo-bar"))
 }
 ```
 

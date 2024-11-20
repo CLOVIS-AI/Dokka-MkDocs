@@ -6,21 +6,21 @@ plugins {
 }
 
 dependencies {
-	implementation(libs.gradle.dokkatoo)
+	implementation(libs.gradle.dokka)
 }
 
 gradlePlugin {
 	plugins {
-		register("dokkatoo-mkdocs") {
-			id = "dev.opensavvy.dokkatoo-mkdocs"
-			implementationClass = "opensavvy.dokka.gradle.DokkatooMkDocsPlugin"
+		register("dokka-mkdocs") {
+			id = "dev.opensavvy.dokka-mkdocs"
+			implementationClass = "opensavvy.dokka.gradle.DokkaMkDocsPlugin"
 		}
 	}
 }
 
 library {
-	name.set("Dokkatoo: Material for MkDocs format")
-	description.set("Gradle plugin to add the Material for MkDocs format to Dokkatoo")
+	name.set("Dokka: Material for MkDocs format")
+	description.set("Gradle plugin to add the Material for MkDocs format to Dokka 2+")
 	homeUrl.set("https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/")
 
 	license.set {
