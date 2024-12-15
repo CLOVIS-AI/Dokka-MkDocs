@@ -115,7 +115,7 @@ abstract class DokkatooMkDocsPlugin : DokkatooFormatPlugin(formatName = "mkdocs"
 
 	override fun DokkatooFormatPluginContext.configure() {
 		project.dependencies {
-			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:1.0.0")
+			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:$DokkaMkDocsVersion")
 		}
 	}
 }

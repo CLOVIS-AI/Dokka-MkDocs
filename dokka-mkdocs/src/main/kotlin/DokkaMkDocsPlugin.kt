@@ -2,6 +2,7 @@ package opensavvy.dokka.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Sync
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
@@ -9,13 +10,23 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.jetbrains.dokka.gradle.formats.DokkaFormatPlugin
 import org.jetbrains.dokka.gradle.internal.DokkaInternalApi
+import java.io.File
 
 abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
+	private lateinit var moduleOutputFiles: Provider<List<File>>
+
+	@OptIn(DokkaInternalApi::class)
+	override fun DokkaFormatPluginContext.configure() {
+		project.dependencies {
+			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:$DokkaMkDocsVersion")
+		}
+
+		moduleOutputFiles = formatDependencies.moduleOutputDirectories.incomingArtifactFiles
+	}
+
 	override fun apply(target: Project) {
 		super.apply(target)
-
-		val dokkaMkdocsModuleOutputDirectoriesResolver by target.configurations.named("dokkaMkdocsModuleOutputDirectoriesResolver~internal")
 
 		val siteOutput = target.layout.projectDirectory.dir("docs/api")
 		val navOutput = target.layout.buildDirectory.file("mkdocs/navigation.yaml")
@@ -24,7 +35,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			group = "dokkatoo"
 			description = "Copies the Dokkatoo pages into the website."
 
-			from(dokkaMkdocsModuleOutputDirectoriesResolver)
+			from(moduleOutputFiles)
 			into(siteOutput)
 
 			eachFile {
@@ -112,13 +123,6 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			description = "Lifecycle task to embed configured Dokkatoo modules into a Material for MkDocs website"
 
 			dependsOn(dokkaCopyIntoMkDocs, embedMkDocsNavigation)
-		}
-	}
-
-	@OptIn(DokkaInternalApi::class)
-	override fun DokkaFormatPluginContext.configure() {
-		project.dependencies {
-			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:1.0.0")
 		}
 	}
 }
