@@ -128,9 +128,10 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 }
 
 fun String.decodeAsDokkaUrl(): String {
-	return if (this[0] == '-') {
-		this[1].uppercase() + this.substring(2)
-	} else {
-		this
+	var result = this
+	var index: Int
+	while (result.indexOf('-').also { index = it } >= 0) {
+		result = result.substring(0 until index) + result[index + 1].uppercase() + result.substring(index + 2)
 	}
+	return result
 }
