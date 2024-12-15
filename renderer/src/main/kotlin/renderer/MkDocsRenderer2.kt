@@ -79,7 +79,7 @@ open class MkDocsRenderer2(
 		buildComment { "TABLE NODE $node" }
 
 		when (node.dci.kind) {
-			ContentKind.Packages, ContentKind.Classlikes, ContentKind.Functions -> {
+			ContentKind.Packages, ContentKind.Classlikes, ContentKind.Functions, ContentKind.Constructors, ContentKind.Properties -> {
 				for (pkg in node.children) {
 					for (child in pkg.children) {
 						when (child) {

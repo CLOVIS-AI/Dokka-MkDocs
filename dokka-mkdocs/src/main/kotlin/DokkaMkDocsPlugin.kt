@@ -58,20 +58,32 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			doLast {
 				val root = siteOutput.asFile
 				val builder = StringBuilder()
-				var depth = 1
 
-				root.walkTopDown()
+				root.walkBottomUp()
 					.onEnter { file ->
 						// Ignore directories that only contain other directories
 						file.walkBottomUp().any { it.isFile }
 					}
-					.onLeave {
-						if (it.isDirectory)
-							depth--
+					.sortedWith { a, b ->
+						// Very ugly code :/ Our goal:
+						// ①. A directory should be immediately before its contents
+						// ②. If a file has the same name as a directory, it should be just after the directory's contents
+						// ③. Everything else should be placed alphabetically.
+
+						val aR = a.relativeTo(root)
+						val bR = b.relativeTo(root)
+
+						when {
+							aR.isDirectory && aR in bR -> -1
+							bR.isDirectory && bR in aR -> 1
+							else -> aR.path.replace(File.separatorChar, '\u0001').decodeAsDokkaUrl().compareTo(bR.path.replace(File.separatorChar, '\u0001').decodeAsDokkaUrl())
+						}.also {
+							println("$it — $a \t $b")
+						}
 					}
 					.forEach { file ->
 						val relative = file.relativeTo(root)
-
+						val depth = relative.path.count { it == File.separatorChar } + 1
 						val indent = "    ".repeat(depth) + "  "
 
 						when {
@@ -81,7 +93,6 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 							file.isDirectory -> {
 								builder.appendLine("$indent- ${relative.name.decodeAsDokkaUrl()}:")
-								depth++
 							}
 
 							file.isFile && file.name.endsWith(".md") -> {
@@ -134,4 +145,15 @@ fun String.decodeAsDokkaUrl(): String {
 		result = result.substring(0 until index) + result[index + 1].uppercase() + result.substring(index + 2)
 	}
 	return result
+}
+
+operator fun File.contains(child: File): Boolean {
+	val childPath = child.path.split(File.separatorChar)
+	val parentPath = this.path.split(File.separatorChar)
+
+	for ((i, it) in parentPath.withIndex()) {
+		if (childPath.getOrNull(i) != it) return false
+	}
+
+	return true
 }
