@@ -59,6 +59,13 @@ class Example() {
 }
 
 /**
+ * Top-level function masquerading as a constructor.
+ */
+fun Example(id: Int): Example {
+	TODO()
+}
+
+/**
  * This is a top-level function.
  */
 fun topLevelFunction(): Int {
