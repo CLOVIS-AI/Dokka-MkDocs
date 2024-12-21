@@ -92,7 +92,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 							}
 
 							file.isDirectory -> {
-								builder.appendLine("$indent- ${relative.name.decodeAsDokkaUrl()}:")
+								builder.appendLine("$indent- \"${relative.name.decodeAsDokkaUrl()}\":")
 							}
 
 							file.isFile && file.name.endsWith(".md") -> {
