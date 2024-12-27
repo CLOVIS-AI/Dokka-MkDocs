@@ -223,7 +223,7 @@ open class MkDocsRenderer2(
 			?.children
 			?.filterIsInstance<ContentText>()
 			?.joinToString(" ") { it.text }
-			?.also { appendLine("title: $it") }
+			?.also { appendLine("title: \"$it\"") }
 		appendLine("---")
 
 		// Navigation
