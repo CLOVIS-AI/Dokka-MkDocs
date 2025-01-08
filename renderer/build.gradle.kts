@@ -14,6 +14,7 @@ kotlin {
 }
 
 dependencies {
+	implementation(libs.kotlinx.coroutines)
 	compileOnly(libs.dokka.base)
 	compileOnly(libs.dokka.core)
 }
