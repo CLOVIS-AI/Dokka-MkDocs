@@ -16,17 +16,19 @@
 
 package opensavvy.dokka.material.mkdocs.renderer3
 
-import org.jetbrains.dokka.base.resolvers.local.LocationProvider
-import org.jetbrains.dokka.pages.ContentPage
+import org.jetbrains.dokka.pages.*
 
-internal class RenderingContext(
-	val locations: LocationProvider,
-	val writer: StringBuilder,
-	val page: ContentPage,
-) : Appendable by writer, CharSequence by writer {
+internal fun RenderingContext.buildContent(node: ContentNode) {
+	when (node) {
+		is ContentText -> buildText(node)
+		is ContentHeader -> buildHeader(node)
+		is ContentGroup -> buildGroup(node)
+		else -> appendParagraph("[Unknown content of type ${node::class}]")
+	}
+}
 
-	fun appendParagraph(text: String) {
-		appendLine(text)
-		appendLine()
+internal fun RenderingContext.buildGroup(node: ContentComposite) {
+	for (child in node.children) {
+		buildContent(child)
 	}
 }

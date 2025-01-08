@@ -16,17 +16,10 @@
 
 package opensavvy.dokka.material.mkdocs.renderer3
 
-import org.jetbrains.dokka.base.resolvers.local.LocationProvider
-import org.jetbrains.dokka.pages.ContentPage
+import org.jetbrains.dokka.pages.ContentText
 
-internal class RenderingContext(
-	val locations: LocationProvider,
-	val writer: StringBuilder,
-	val page: ContentPage,
-) : Appendable by writer, CharSequence by writer {
+internal fun RenderingContext.buildText(node: ContentText) {
+	appendLine(node.text)
 
-	fun appendParagraph(text: String) {
-		appendLine(text)
-		appendLine()
-	}
+	// TODO: handle entities within text (italics…)
 }

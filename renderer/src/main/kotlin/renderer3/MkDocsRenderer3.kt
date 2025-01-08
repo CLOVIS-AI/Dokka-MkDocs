@@ -106,7 +106,7 @@ class MkDocsRenderer3(
 		with(context) {
 			buildFrontMatter()
 			buildNavigation()
-			appendLine("Page ${page.dri}")
+			buildContent(page.content)
 		}
 
 		return writer.toString()

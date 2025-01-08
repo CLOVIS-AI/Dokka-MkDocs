@@ -16,17 +16,25 @@
 
 package opensavvy.dokka.material.mkdocs.renderer3
 
-import org.jetbrains.dokka.base.resolvers.local.LocationProvider
-import org.jetbrains.dokka.pages.ContentPage
+import opensavvy.dokka.material.mkdocs.renderer.Decoration
+import opensavvy.dokka.material.mkdocs.renderer.wrapIn
+import org.jetbrains.dokka.pages.ContentHeader
 
-internal class RenderingContext(
-	val locations: LocationProvider,
-	val writer: StringBuilder,
-	val page: ContentPage,
-) : Appendable by writer, CharSequence by writer {
-
-	fun appendParagraph(text: String) {
-		appendLine(text)
-		appendLine()
+internal fun RenderingContext.buildHeader(
+	header: ContentHeader,
+) {
+	val decorator = when (header.level) {
+		1 -> Decoration.ofPrefix("# ")
+		2 -> Decoration.ofPrefix("## ")
+		3 -> Decoration.ofPrefix("### ")
+		4 -> Decoration.ofPrefix("#### ")
+		5 -> Decoration.ofPrefix("##### ")
+		else -> Decoration.ofPrefix("###### ")
 	}
+
+	decorator.wrapIn(writer) {
+		buildGroup(header)
+	}
+
+	appendLine()
 }
