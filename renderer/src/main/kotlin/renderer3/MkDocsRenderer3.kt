@@ -94,6 +94,21 @@ class MkDocsRenderer3(
 		}
 	}
 
-	private suspend fun buildPage(page: ContentPage): String =
-		"The contents of the page ${page.dri}"
+	private fun buildPage(page: ContentPage): String {
+		val writer = StringBuilder()
+
+		val context = RenderingContext(
+			locations = locationProvider,
+			writer = writer,
+			page = page,
+		)
+
+		with(context) {
+			buildFrontMatter()
+			buildNavigation()
+			appendLine("Page ${page.dri}")
+		}
+
+		return writer.toString()
+	}
 }
