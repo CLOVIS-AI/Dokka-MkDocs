@@ -1,6 +1,6 @@
 plugins {
 	alias(opensavvyConventions.plugins.base)
-	id("dev.opensavvy.dokka-mkdocs") version "VERSION HERE"
+	id("dev.opensavvy.dokka-mkdocs")
 }
 
 dependencies {

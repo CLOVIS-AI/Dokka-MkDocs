@@ -1,5 +1,4 @@
-import dev.adamko.dokkatoo.tasks.DokkatooGenerateTask
-import org.gradle.kotlin.dsl.withType
+import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
 
 plugins {
 	`kotlin-dsl`
@@ -60,6 +59,6 @@ tasks.sourcesJar {
 	dependsOn(embedCurrentVersion)
 }
 
-tasks.withType<DokkatooGenerateTask> {
+tasks.withType<DokkaGenerateTask> {
 	dependsOn(embedCurrentVersion)
 }
