@@ -89,8 +89,8 @@ nav:
   - Getting started:
       - setup.md
 
-  # !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #
-  # !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #
+# !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #
+# !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #
 
   - Reference (plugin API):
       - reference.md
