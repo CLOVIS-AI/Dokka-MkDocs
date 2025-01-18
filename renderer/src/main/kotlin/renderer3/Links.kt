@@ -16,6 +16,7 @@
 
 package opensavvy.dokka.material.mkdocs.renderer3
 
+import org.jetbrains.dokka.pages.ContentDRILink
 import org.jetbrains.dokka.pages.PageNode
 
 internal fun RenderingContext.buildLink(to: PageNode, from: PageNode) =
@@ -27,4 +28,20 @@ internal fun RenderingContext.buildLink(address: String, label: RenderingContext
 	append("<a href=\"$address\">")
 	label()
 	append("</a>")
+}
+
+internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
+	var address = locations.resolve(link.address, link.sourceSets, page)
+
+	if (address != null && address.endsWith(".md")) {
+		address = address.removeSuffix(".md") + ".html"
+	}
+
+	if (address != null) {
+		buildLink(address) {
+			buildGroup(link)
+		}
+	} else {
+		buildGroup(link)
+	}
 }

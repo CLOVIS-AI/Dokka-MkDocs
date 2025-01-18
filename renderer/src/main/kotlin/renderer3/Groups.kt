@@ -21,10 +21,14 @@ import org.jetbrains.dokka.pages.TextStyle
 
 private val groupStyles = mapOf(
 	TextStyle.Monospace to Decorator { content ->
-		append("<div class=\"highlight\"><pre><code class=\"md-code__content\"><span markdown>\n")
+		append("<div class=\"highlight\"><pre><code class=\"md-code__content\"><span markdown>")
 		content()
 		append("\n</span></code></pre></div>")
 	},
+	TextStyle.Paragraph to Decorator { content ->
+		content()
+		appendLine()
+	}
 )
 
 internal fun RenderingContext.buildGroup(node: ContentComposite) {
@@ -32,6 +36,5 @@ internal fun RenderingContext.buildGroup(node: ContentComposite) {
 		for (child in node.children) {
 			buildContent(child)
 		}
-		appendLine()
 	}
 }
