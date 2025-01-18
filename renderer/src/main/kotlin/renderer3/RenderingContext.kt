@@ -19,7 +19,7 @@ package opensavvy.dokka.material.mkdocs.renderer3
 import org.jetbrains.dokka.base.resolvers.local.LocationProvider
 import org.jetbrains.dokka.pages.ContentPage
 
-internal class RenderingContext(
+internal data class RenderingContext(
 	val locations: LocationProvider,
 	val writer: StringBuilder,
 	val page: ContentPage,
