@@ -17,9 +17,22 @@
 package opensavvy.dokka.material.mkdocs.renderer3
 
 import org.jetbrains.dokka.pages.ContentText
+import org.jetbrains.dokka.pages.TokenStyle
+
+private val textStyles = mapOf(
+	TokenStyle.Keyword to Decorator.ofSpan("kd"),
+	TokenStyle.Punctuation to Decorator.ofSpan("p"),
+	TokenStyle.Function to Decorator.ofSpan("nf"),
+	TokenStyle.Operator to Decorator.ofSpan("o"),
+	TokenStyle.Annotation to Decorator.ofSpan("se"),
+	TokenStyle.Number to Decorator.ofSpan("mi"),
+	TokenStyle.String to Decorator.ofSpan("s"),
+	TokenStyle.Boolean to Decorator.ofSpan("kc"),
+	TokenStyle.Constant to Decorator.ofSpan("nb"),
+)
 
 internal fun RenderingContext.buildText(node: ContentText) {
-	appendLine(node.text)
-
-	// TODO: handle entities within text (italics…)
+	decorateWith(textStyles.matches(node)) {
+		append(node.text)
+	}
 }

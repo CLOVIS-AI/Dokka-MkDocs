@@ -16,15 +16,22 @@
 
 package opensavvy.dokka.material.mkdocs.renderer3
 
-import org.jetbrains.dokka.pages.*
+import org.jetbrains.dokka.pages.ContentComposite
+import org.jetbrains.dokka.pages.TextStyle
 
-internal fun RenderingContext.buildContent(node: ContentNode) {
-	when (node) {
-		is ContentText -> buildText(node)
-		is ContentHeader -> buildHeader(node)
-		is PlatformHintedContent -> buildPlatformHinted(node)
-		is ContentDivergentGroup -> buildPlatformDivergent(node)
-		is ContentGroup -> buildGroup(node)
-		else -> appendParagraph("[Unknown content of type ${node::class}]")
+private val groupStyles = mapOf(
+	TextStyle.Monospace to Decorator { content ->
+		append("<div class=\"highlight\"><pre><code class=\"md-code__content\"><span markdown>\n")
+		content()
+		append("\n</span></code></pre></div>")
+	},
+)
+
+internal fun RenderingContext.buildGroup(node: ContentComposite) {
+	decorateWith(groupStyles.matches(node)) {
+		for (child in node.children) {
+			buildContent(child)
+		}
+		appendLine()
 	}
 }
