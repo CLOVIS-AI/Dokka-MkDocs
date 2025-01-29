@@ -4,8 +4,10 @@ A [Dokka](https://github.com/Kotlin/dokka) output format tailored for inclusion 
 
 This repository is composed of:
 - [The Dokka renderer](renderer) that generates the Material for MkDocs pages,
-- [The Gradle plugin](gradle/conventions/dokkatoo-mkdocs) that configures the project,
-- [An example project](example).
+- [The Gradle plugin](dokka-mkdocs) that configures the project,
+- [An example project](docs/example).
+
+To learn more about the project, read [the documentation](https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/index.html).
 
 ## License
 
