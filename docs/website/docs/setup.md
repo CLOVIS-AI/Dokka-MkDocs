@@ -1,6 +1,6 @@
 # Configuration
 
-This project takes the form of a Gradle plugin which extracts information using Dokkatoo then embeds it into a [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) site.
+This project takes the form of a Gradle plugin which extracts information using Dokka then embeds it into a [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) site.
 
 ## Creating the project
 
@@ -21,28 +21,28 @@ your-project/
     settings.gradle.kts
 ```
 
-You will also need to configure [Dokkatoo](https://github.com/adamko-dev/dokkatoo) for your project. You can follow the official documentation and use any of the official formats to test your configuration (e.g. the HTML format).
+You will also need to configure Dokka for your project. You can follow the official documentation and use any of the official formats to test your configuration (e.g. the HTML format). However, note that only Dokka in 2.0 mode is compatible.
 
 ## Configuring Gradle
 
 Locate the `mkdocs.yml` file. In the same directory, create a `build.gradle.kts` file:
 ```kotlin title="build.gradle.kts in the same folder as mkdocs.yml"
-id("dev.opensavvy.dokkatoo-mkdocs") version "VERSION HERE" //(1)!
+id("dev.opensavvy.dokka-mkdocs") version "VERSION HERE" //(1)!
 
 dependencies {
 	// Embeds the documentation from project :foo-bar
-	dokkatoo(project("foo-bar"))
+	dokka(project("foo-bar"))
 }
 ```
 
-1. Latest version: <a href="https://search.maven.org/search?q=g:%22dev.opensavvy.dokka.mkdocs%22%20AND%20a:%22dokkatoo-mkdocs%22"><img src="https://img.shields.io/maven-central/v/dev.opensavvy.dokka.mkdocs/dokkatoo-mkdocs.svg?label=Maven%20Central"></a> <br/> All versions: [Release list](https://gitlab.com/opensavvy/automation/dokka-material-mkdocs/-/releases)
+1. Latest version: <a href="https://search.maven.org/search?q=g:%22dev.opensavvy.dokka.mkdocs%22%20AND%20a:%22dokka-mkdocs%22"><img src="https://img.shields.io/maven-central/v/dev.opensavvy.dokka.mkdocs/dokka-mkdocs.svg?label=Maven%20Central"></a> <br/> All versions: [Release list](https://gitlab.com/opensavvy/automation/dokka-material-mkdocs/-/releases)
 
 Each Gradle project that you want to include in the website should be added to the `dependencies` block.
 You may include as many projects as you want.
 
-Each project mentioned needs to be configured to generate documentation with Dokkatoo, see the Dokkatoo documentation for more information. If you can see the documentation from the project in another format (e.g. Dokkatoo HTML), it is configured properly.
+Each project mentioned needs to be configured to generate documentation with Dokka, see the Dokka documentation for more information. If you can see the documentation from the project in another format (e.g. Dokka HTML), it is configured properly.
 
-Projects that are not mentioned in the `dependencies` block do not need to be configured to use Dokkatoo.
+Projects that are not mentioned in the `dependencies` block do not need to be configured to use Dokka.
 
 Don't forget to include the project you created into your Gradle build:
 ```kotlin title="Root settings.gradle.kts"
