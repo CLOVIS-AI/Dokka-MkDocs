@@ -51,22 +51,31 @@ private fun RenderingContext.buildPlatformsGroup(group: ContentNode) {
 		child.sourceSets.joinToString(", ") { it.name }
 	}
 
-	for ((sourceSet, specific) in bySourceSet) {
-		appendLine("=== \"${sourceSet}\"")
-		appendLine()
-
-		val childWriter = StringBuilder()
-		val childContext = this.copy(writer = childWriter)
-		for (child in specific) {
-			childContext.buildContent(child)
+	if (bySourceSet.size == 1) {
+		// There is a single available platform for this definition,
+		// no need to emit the different tabs.
+		for (child in group.children) {
+			buildContent(child)
+		}
+	} else {
+		for ((sourceSet, specific) in bySourceSet) {
+			appendLine("=== \"${sourceSet}\"")
 			appendLine()
+
+			val childWriter = StringBuilder()
+			val childContext = this.copy(writer = childWriter)
+			for (child in specific) {
+				childContext.buildContent(child)
+				appendLine()
+				appendLine()
+			}
+			childWriter.split("\n")
+				.map { "    $it" }
+				.forEach { appendLine(it) }
+
 			appendLine()
 		}
-		childWriter.split("\n")
-			.map { "    $it" }
-			.forEach { appendLine(it) }
-
-		appendLine()
 	}
+
 	appendLine("\n</div>\n")
 }
