@@ -28,6 +28,7 @@ private val groupStyles = mapOf(
 	TextStyle.Paragraph to Decorator { content ->
 		content()
 		appendLine()
+		appendLine()
 	}
 )
 
