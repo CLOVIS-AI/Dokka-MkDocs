@@ -17,6 +17,7 @@
 package opensavvy.dokka.material.mkdocs.renderer3
 
 import org.jetbrains.dokka.pages.ContentDRILink
+import org.jetbrains.dokka.pages.ContentResolvedLink
 import org.jetbrains.dokka.pages.PageNode
 
 internal fun RenderingContext.buildLink(to: PageNode, from: PageNode) =
@@ -42,6 +43,12 @@ internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
 			buildGroup(link)
 		}
 	} else {
+		buildGroup(link)
+	}
+}
+
+internal fun RenderingContext.buildResolvedLink(link: ContentResolvedLink) {
+	buildLink(link.address) {
 		buildGroup(link)
 	}
 }
