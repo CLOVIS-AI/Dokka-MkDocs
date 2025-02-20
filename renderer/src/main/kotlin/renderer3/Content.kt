@@ -21,6 +21,7 @@ import org.jetbrains.dokka.pages.*
 internal fun RenderingContext.buildContent(node: ContentNode) {
 	when (node) {
 		is ContentText -> buildText(node)
+		is ContentCodeInline -> buildCodeInline(node)
 		is ContentHeader -> buildHeader(node)
 		is PlatformHintedContent -> buildPlatformHinted(node)
 		is ContentDivergentGroup -> buildPlatformDivergent(node)

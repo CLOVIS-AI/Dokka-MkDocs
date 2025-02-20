@@ -16,10 +16,7 @@
 
 package opensavvy.dokka.material.mkdocs.renderer3
 
-import org.jetbrains.dokka.pages.ContentText
-import org.jetbrains.dokka.pages.Style
-import org.jetbrains.dokka.pages.TextStyle
-import org.jetbrains.dokka.pages.TokenStyle
+import org.jetbrains.dokka.pages.*
 
 private val textStyles: Map<Style, Decorator> = mapOf(
 	TokenStyle.Keyword to Decorator.ofSpan("kd"),
@@ -41,4 +38,14 @@ internal fun RenderingContext.buildText(node: ContentText) {
 	decorateWith(textStyles.matches(node)) {
 		append(node.text)
 	}
+}
+
+internal fun RenderingContext.buildCodeInline(node: ContentCodeInline) {
+	if (node.language.isNotBlank()) {
+		append("`#!${node.language} ")
+	} else {
+		append("`")
+	}
+	buildGroup(node)
+	append("`")
 }
