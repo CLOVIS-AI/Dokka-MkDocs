@@ -17,9 +17,11 @@
 package opensavvy.dokka.material.mkdocs.renderer3
 
 import org.jetbrains.dokka.pages.ContentText
+import org.jetbrains.dokka.pages.Style
+import org.jetbrains.dokka.pages.TextStyle
 import org.jetbrains.dokka.pages.TokenStyle
 
-private val textStyles = mapOf(
+private val textStyles: Map<Style, Decorator> = mapOf(
 	TokenStyle.Keyword to Decorator.ofSpan("kd"),
 	TokenStyle.Punctuation to Decorator.ofSpan("p"),
 	TokenStyle.Function to Decorator.ofSpan("nf"),
@@ -29,6 +31,10 @@ private val textStyles = mapOf(
 	TokenStyle.String to Decorator.ofSpan("s"),
 	TokenStyle.Boolean to Decorator.ofSpan("kc"),
 	TokenStyle.Constant to Decorator.ofSpan("nb"),
+
+	TextStyle.Strong to Decorator.ofElement("strong"),
+	TextStyle.Italic to Decorator.ofElement("em"),
+	TextStyle.Strikethrough to Decorator.ofElement("s"),
 )
 
 internal fun RenderingContext.buildText(node: ContentText) {
