@@ -34,6 +34,10 @@ internal fun RenderingContext.buildTable(node: ContentTable) {
 			buildTableAsList(node)
 		}
 
+		ContentKind.Main -> {
+			buildTableAsDefinitions(node)
+		}
+
 		else -> appendParagraph("[Unknown table of kind ${node.dci.kind}]")
 	}
 }
@@ -66,6 +70,23 @@ private fun RenderingContext.buildTableAsList(node: ContentTable) {
 	for (child in node.children) {
 		append(" - ")
 		buildContent(child)
+		appendLine()
+	}
+
+	appendLine()
+	appendLine()
+}
+
+private fun RenderingContext.buildTableAsDefinitions(node: ContentTable) {
+	appendLine()
+	appendLine()
+
+	for (child in node.children) {
+		val (header, body) = child.children
+		buildContent(header)
+		append("\n\n")
+		append(":   ")
+		buildContent(body)
 		appendLine()
 	}
 
