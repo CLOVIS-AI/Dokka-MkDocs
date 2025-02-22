@@ -23,6 +23,7 @@ internal data class RenderingContext(
 	val locations: LocationProvider,
 	val writer: StringBuilder,
 	val page: ContentPage,
+	val isInCodeBlock: Boolean = false,
 ) : Appendable by writer, CharSequence by writer {
 
 	fun appendParagraph(text: String) {

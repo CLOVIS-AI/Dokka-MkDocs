@@ -21,9 +21,13 @@ import org.jetbrains.dokka.pages.TextStyle
 
 private val groupStyles = mapOf(
 	TextStyle.Monospace to Decorator { content ->
-		append("<div class=\"highlight\"><pre><code class=\"md-code__content\"><span markdown>")
-		content()
-		append("\n</span></code></pre></div>")
+		if (!this.isInCodeBlock)
+			append("<div class=\"highlight\"><pre><code class=\"md-code__content\"><span markdown>")
+		with(this.copy(isInCodeBlock = true)) {
+			content()
+		}
+		if (!this.isInCodeBlock)
+			append("\n</span></code></pre></div>")
 	},
 	TextStyle.Paragraph to Decorator { content ->
 		content()
