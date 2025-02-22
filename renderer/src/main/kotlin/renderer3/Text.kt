@@ -38,6 +38,10 @@ internal fun RenderingContext.buildText(node: ContentText) {
 	decorateWith(textStyles.matches(node)) {
 		append(node.text)
 	}
+
+	if (node.hasStyle(TokenStyle.Annotation) && node.text != "@") {
+		appendLine()
+	}
 }
 
 internal fun RenderingContext.buildCodeInline(node: ContentCodeInline) {
