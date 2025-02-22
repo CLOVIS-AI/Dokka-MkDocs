@@ -26,9 +26,15 @@ internal fun RenderingContext.buildLink(to: PageNode, from: PageNode) =
 	}
 
 internal fun RenderingContext.buildLink(address: String, label: RenderingContext.() -> Unit) {
-	append("<a href=\"$address\">")
-	label()
-	append("</a>")
+	if (isInCodeBlock) {
+		append("<a href=\"$address\">")
+		label()
+		append("</a>")
+	} else {
+		append('[')
+		label()
+		append("]($address)")
+	}
 }
 
 internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
