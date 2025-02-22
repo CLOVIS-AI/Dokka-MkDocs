@@ -30,6 +30,10 @@ internal fun RenderingContext.buildTable(node: ContentTable) {
 			buildTableAsSections(node)
 		}
 
+		ContentKind.Inheritors -> {
+			buildTableAsList(node)
+		}
+
 		else -> appendParagraph("[Unknown table of kind ${node.dci.kind}]")
 	}
 }
@@ -53,4 +57,18 @@ private fun RenderingContext.buildTableAsSections(node: ContentTable) {
 			}
 		}
 	}
+}
+
+private fun RenderingContext.buildTableAsList(node: ContentTable) {
+	appendLine()
+	appendLine()
+
+	for (child in node.children) {
+		append(" - ")
+		buildContent(child)
+		appendLine()
+	}
+
+	appendLine()
+	appendLine()
 }
