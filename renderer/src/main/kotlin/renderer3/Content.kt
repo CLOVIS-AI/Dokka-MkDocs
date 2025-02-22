@@ -30,6 +30,7 @@ internal fun RenderingContext.buildContent(node: ContentNode) {
 		is ContentResolvedLink -> buildResolvedLink(node)
 		is ContentGroup -> buildGroup(node)
 		is ContentTable -> buildTable(node)
+		is ContentList -> buildList(node)
 		is ContentBreakLine -> appendLine()
 		else -> appendParagraph("[Unknown content of type ${node::class}]")
 	}
