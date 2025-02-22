@@ -19,21 +19,13 @@ package opensavvy.dokka.material.mkdocs.renderer3
 import org.jetbrains.dokka.pages.ContentList
 
 internal fun RenderingContext.buildList(node: ContentList) {
-	if (node.ordered) {
-		append("<ol>")
-	} else {
-		append("<ul>")
-	}
+	val prefix =
+		if (node.ordered) "1. "
+		else " - "
 
 	for (child in node.children) {
-		append("<li markdown>\n\n")
+		append(prefix)
 		buildContent(child)
-		append("\n</li>")
-	}
-
-	if (node.ordered) {
-		append("</ol>")
-	} else {
-		append("</ul>")
+		appendLine()
 	}
 }
