@@ -48,10 +48,10 @@ internal fun RenderingContext.buildFrontMatter() {
 internal fun RenderingContext.buildNavigation() {
 	var first = true
 
-	locations.ancestors(page).asReversed()
+	val targets = locations.ancestors(page).asReversed()
 		.filter { it.name.isNotBlank() }
-		.takeIf { it.size > 1 }.orEmpty() // Don't render the navigation bar for module pages
-		.forEach { node ->
+		.takeIf { it.size > 1 } // Don't render the navigation bar for module pages
+		?.forEach { node ->
 			if (first) {
 				first = false
 			} else {
@@ -61,8 +61,9 @@ internal fun RenderingContext.buildNavigation() {
 			if (node.isNavigable) buildLink(node, page)
 			else append(node.name)
 		}
-
 	appendLine()
+	if (targets != null)
+		appendLine(" { data-search-exclude }")
 	appendLine()
 }
 
