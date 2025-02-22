@@ -34,7 +34,7 @@ internal fun RenderingContext.buildTable(node: ContentTable) {
 			buildTableAsList(node)
 		}
 
-		ContentKind.Main -> {
+		ContentKind.Main, ContentKind.Parameters -> {
 			buildTableAsDefinitions(node)
 		}
 
