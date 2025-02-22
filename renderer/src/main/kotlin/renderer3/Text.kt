@@ -53,3 +53,10 @@ internal fun RenderingContext.buildCodeInline(node: ContentCodeInline) {
 	buildGroup(node)
 	append("`")
 }
+
+internal fun RenderingContext.buildCodeBlock(node: ContentCodeBlock) {
+	appendLine("```${node.language}")
+	buildGroup(node)
+	appendLine("\n```")
+	appendLine()
+}

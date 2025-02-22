@@ -22,6 +22,7 @@ internal fun RenderingContext.buildContent(node: ContentNode) {
 	when (node) {
 		is ContentText -> buildText(node)
 		is ContentCodeInline -> buildCodeInline(node)
+		is ContentCodeBlock -> buildCodeBlock(node)
 		is ContentHeader -> buildHeader(node)
 		is PlatformHintedContent -> buildPlatformHinted(node)
 		is ContentDivergentGroup -> buildPlatformDivergent(node)
@@ -29,6 +30,7 @@ internal fun RenderingContext.buildContent(node: ContentNode) {
 		is ContentResolvedLink -> buildResolvedLink(node)
 		is ContentGroup -> buildGroup(node)
 		is ContentTable -> buildTable(node)
+		is ContentBreakLine -> appendLine()
 		else -> appendParagraph("[Unknown content of type ${node::class}]")
 	}
 }
