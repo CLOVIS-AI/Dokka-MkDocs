@@ -77,8 +77,6 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 							aR.isDirectory && aR in bR -> -1
 							bR.isDirectory && bR in aR -> 1
 							else -> aR.path.replace(File.separatorChar, '\u0001').decodeAsDokkaUrl().compareTo(bR.path.replace(File.separatorChar, '\u0001').decodeAsDokkaUrl())
-						}.also {
-							println("$it — $a \t $b")
 						}
 					}
 					.forEach { file ->

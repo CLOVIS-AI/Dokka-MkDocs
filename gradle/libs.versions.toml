@@ -1,12 +1,15 @@
 # List of dependencies of the project
 
 [versions]
+coroutines = "1.10.1"    # https://github.com/Kotlin/kotlinx.coroutines/releases
 dokka = "2.0.0-Beta"     # https://github.com/Kotlin/dokka/releases
 dokkatoo = "2.3.1"       # https://github.com/adamko-dev/dokkatoo/releases
 
 [plugins]
 
 [libraries]
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
 dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
 dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka" }
 
