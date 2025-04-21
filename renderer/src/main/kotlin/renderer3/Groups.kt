@@ -33,6 +33,13 @@ private val groupStyles = mapOf(
 		content()
 		appendLine()
 		appendLine()
+	},
+	TextStyle.Quotation to Decorator { content ->
+		appendLine("<blockquote markdown>")
+		appendLine()
+		content()
+		appendLine()
+		appendLine("</blockquote>")
 	}
 )
 
