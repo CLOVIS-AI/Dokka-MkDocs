@@ -52,6 +52,8 @@ class Example() {
 
 	/**
 	 * Some other documentation.
+	 *
+	 * @see Example See the [Example] class for more information.
 	 */
 	fun foo(number: Int): Boolean {
 		TODO()
