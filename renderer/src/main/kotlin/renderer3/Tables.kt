@@ -69,7 +69,10 @@ private fun RenderingContext.buildTableAsList(node: ContentTable) {
 
 	for (child in node.children) {
 		append(" - ")
-		buildContent(child)
+		for (section in child.children) {
+			buildContent(section)
+			append(" ")
+		}
 		appendLine()
 	}
 

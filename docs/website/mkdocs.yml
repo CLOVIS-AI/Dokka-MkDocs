@@ -106,6 +106,26 @@ nav:
       - setup.md
 
 # !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #
+  - Reference (experimental):
+      - "Example app":
+          - api/-example app/index.md
+          - "opensavvy.dokka.material.mkdocs.example":
+              - api/-example app/opensavvy.dokka.material.mkdocs.example/index.md
+              - api/-example app/opensavvy.dokka.material.mkdocs.example/main.md
+      - "Library module":
+          - api/-library module/index.md
+          - "opensavvy.dokka.material.mkdocs.example":
+              - "Example":
+                  - api/-library module/opensavvy.dokka.material.mkdocs.example/-example/-example.md
+                  - api/-library module/opensavvy.dokka.material.mkdocs.example/-example/counter.md
+                  - api/-library module/opensavvy.dokka.material.mkdocs.example/-example/foo.md
+                  - api/-library module/opensavvy.dokka.material.mkdocs.example/-example/index.md
+              - api/-library module/opensavvy.dokka.material.mkdocs.example/-example.md
+              - "ExampleAlias":
+                  - api/-library module/opensavvy.dokka.material.mkdocs.example/-example-alias/index.md
+              - api/-library module/opensavvy.dokka.material.mkdocs.example/foo2.md
+              - api/-library module/opensavvy.dokka.material.mkdocs.example/index.md
+              - api/-library module/opensavvy.dokka.material.mkdocs.example/top-level-function.md
 # !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #
 
   - Reference (plugin API):
