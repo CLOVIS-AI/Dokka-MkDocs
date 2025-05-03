@@ -44,6 +44,11 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 			exclude("includes/*")
 
+			val gitignore = File(siteOutput.asFile, ".gitignore")
+			doLast {
+				gitignore.writeText("*")
+			}
+
 			includeEmptyDirs = true
 			duplicatesStrategy = DuplicatesStrategy.WARN // TODO make each module generate files in its own directory, afterwards remove this
 		}
