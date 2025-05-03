@@ -113,9 +113,6 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			outputs.file(mkdocsYaml)
 
 			doLast {
-				val startMarker = "# !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #"
-				val endMarker = "# !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #"
-
 				val lines = mkdocsYaml.asFile.readLines()
 				val start = lines.takeWhile { it != startMarker }
 				val end = lines.takeLastWhile { it != endMarker }
@@ -127,12 +124,38 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			}
 		}
 
+		val removeMkDocsNavigation by target.tasks.registering {
+			group = "dokkatoo"
+			description = "Removes all the generated files to the index of the MkDocs site"
+
+			inputs.file(mkdocsYaml)
+			outputs.file(mkdocsYaml)
+
+			doLast {
+				val lines = mkdocsYaml.asFile.readLines()
+				val start = lines.takeWhile { it != startMarker }
+				val end = lines.takeLastWhile { it != endMarker }
+
+				val output = start + startMarker + endMarker + end
+				mkdocsYaml.asFile.writeText(output.joinToString(System.lineSeparator()) + System.lineSeparator())
+			}
+		}
+
 		val embedDokkaIntoMkDocs by target.tasks.registering {
 			group = "dokkatoo"
 			description = "Lifecycle task to embed configured Dokkatoo modules into a Material for MkDocs website"
 
 			dependsOn(dokkaCopyIntoMkDocs, embedMkDocsNavigation)
 		}
+
+		target.tasks.named("clean") {
+			dependsOn("cleanDokkaCopyIntoMkDocs", removeMkDocsNavigation)
+		}
+	}
+
+	companion object {
+		private const val startMarker = "# !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #"
+		private const val endMarker = "# !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #"
 	}
 }
 
