@@ -20,7 +20,7 @@ dependencies {
 }
 ```
 
-Add each project that you want to document in the `dependencies {}` block. Each project mentioned in that way must have the Dokkatoo plugin applied.
+Add each project that you want to document in the `dependencies {}` block. Each project mentioned in that way must have the Dokka plugin applied.
 
 Add the directory in which you created the project in the `settings.gradle.kts` file:
 ```kotlin

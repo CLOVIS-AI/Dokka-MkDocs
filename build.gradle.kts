@@ -22,7 +22,7 @@ plugins {
 dependencies {
 	// List the 'library' projects
 	dokka(projects.renderer)
-	dokka(projects.dokkatooMkdocs)
+	dokka(projects.dokkaMkdocs)
 }
 
 // region Check the users of the project didn't forget to rename the group
