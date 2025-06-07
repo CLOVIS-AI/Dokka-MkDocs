@@ -9,14 +9,14 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.jetbrains.dokka.gradle.formats.DokkaFormatPlugin
-import org.jetbrains.dokka.gradle.internal.DokkaInternalApi
+import org.jetbrains.dokka.gradle.internal.InternalDokkaGradlePluginApi
 import java.io.File
 
 abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 	private lateinit var moduleOutputFiles: Provider<List<File>>
 
-	@OptIn(DokkaInternalApi::class)
+	@OptIn(InternalDokkaGradlePluginApi::class)
 	override fun DokkaFormatPluginContext.configure() {
 		project.dependencies {
 			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:$DokkaMkDocsVersion")
@@ -32,7 +32,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		val navOutput = target.layout.buildDirectory.file("mkdocs/navigation.yaml")
 
 		val dokkaCopyIntoMkDocs by target.tasks.registering(Sync::class) {
-			group = "dokkatoo"
+			group = GROUP
 			description = "Copies the Dokkatoo pages into the website."
 
 			from(moduleOutputFiles)
@@ -54,7 +54,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		}
 
 		val generateMkDocsNavigation by target.tasks.registering {
-			group = "dokkatoo"
+			group = GROUP
 			description = "Scans the generated documentation files to generate the MkDocs index"
 
 			inputs.files(dokkaCopyIntoMkDocs)
@@ -110,7 +110,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 		val mkdocsYaml = target.layout.projectDirectory.file("mkdocs.yml")
 		val embedMkDocsNavigation by target.tasks.registering {
-			group = "dokkatoo"
+			group = GROUP
 			description = "Adds all the generated files to the index of the MkDocs site"
 
 			inputs.files(generateMkDocsNavigation)
@@ -130,7 +130,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		}
 
 		val removeMkDocsNavigation by target.tasks.registering {
-			group = "dokkatoo"
+			group = GROUP
 			description = "Removes all the generated files to the index of the MkDocs site"
 
 			inputs.file(mkdocsYaml)
@@ -147,7 +147,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		}
 
 		val embedDokkaIntoMkDocs by target.tasks.registering {
-			group = "dokkatoo"
+			group = GROUP
 			description = "Lifecycle task to embed configured Dokkatoo modules into a Material for MkDocs website"
 
 			dependsOn(dokkaCopyIntoMkDocs, embedMkDocsNavigation)
@@ -161,6 +161,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 	companion object {
 		private const val startMarker = "# !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #"
 		private const val endMarker = "# !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #"
+		private const val GROUP = "Dokka MkDocs"
 	}
 }
 
