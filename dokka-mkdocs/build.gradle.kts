@@ -23,7 +23,7 @@ gradlePlugin {
 library {
 	name.set("Dokka: Material for MkDocs format")
 	description.set("Gradle plugin to add the Material for MkDocs format to Dokka 2+")
-	homeUrl.set("https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/")
+	homeUrl.set("https://dokka-mkdocs.opensavvy.dev/")
 
 	license.set {
 		name.set("Apache 2.0")
