@@ -6,7 +6,7 @@ Gradle plugin to configure Dokka 2+ with Material for MkDocs.
 <a href="https://opensavvy.dev/open-source/stability.html"><img src="https://badgen.net/static/Stability/alpha/purple"></a>
 <a href="https://javadoc.io/doc/dev.opensavvy.dokka.mkdocs/dokka-mkdocs"><img src="https://badgen.net/static/Other%20versions/javadoc.io/blue"></a>
 
-This is a Gradle plugin using Dokka to extract Kotlin documentation and embed it in a Material for MkDocs site. To learn more about the project, see [the documentation](https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/).
+This is a Gradle plugin using Dokka to extract Kotlin documentation and embed it in a Material for MkDocs site. To learn more about the project, see [the documentation](https://dokka-mkdocs.opensavvy.dev/).
 
 ## Configuration
 

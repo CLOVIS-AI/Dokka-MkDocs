@@ -7,7 +7,7 @@ This repository is composed of:
 - [The Gradle plugin](dokka-mkdocs) that configures the project,
 - [An example project](docs/example).
 
-To learn more about the project, read [the documentation](https://opensavvy.gitlab.io/automation/dokka-material-mkdocs/docs/index.html).
+To learn more about the project, read [the documentation](https://dokka-mkdocs.opensavvy.dev/).
 
 ## License
 
