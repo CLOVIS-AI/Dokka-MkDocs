@@ -4,6 +4,7 @@ import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Sync
+import org.gradle.internal.execution.caching.CachingState.enabled
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
@@ -132,6 +133,8 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		val removeMkDocsNavigation by target.tasks.registering {
 			group = GROUP
 			description = "Removes all the generated files to the index of the MkDocs site"
+
+			onlyIf("Does this project have a mkdocs.yml file?") { mkdocsYaml.asFile.exists() }
 
 			inputs.file(mkdocsYaml)
 			outputs.file(mkdocsYaml)
