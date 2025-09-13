@@ -23,6 +23,7 @@ mkdocs:
     - mkdocs build --site-dir ../../docs-website
 
   after_script:
+    - ./gradlew -p docs clean
     - echo "URL=$(.gitlab/ci/review-url.sh docs-website/index.html)" >>docs.env
 
   artifacts:
