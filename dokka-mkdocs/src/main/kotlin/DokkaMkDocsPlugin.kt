@@ -4,7 +4,6 @@ import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Sync
-import org.gradle.internal.execution.caching.CachingState.enabled
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
@@ -39,12 +38,6 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 			from(moduleOutputFiles)
 			into(siteOutput)
-
-			eachFile {
-				path = path.removePrefix("module/")
-			}
-
-			exclude("includes/*")
 
 			val gitignore = File(siteOutput.asFile, ".gitignore")
 			doLast {
