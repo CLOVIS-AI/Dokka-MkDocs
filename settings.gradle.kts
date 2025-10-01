@@ -59,6 +59,7 @@ plugins {
 }
 
 include(
+	"aggregator",
 	"renderer",
 	"dokka-mkdocs",
 

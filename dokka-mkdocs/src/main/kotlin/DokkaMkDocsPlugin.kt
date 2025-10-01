@@ -21,8 +21,9 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 	override fun DokkaFormatPluginContext.configure() {
 		project.dependencies {
 			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:$DokkaMkDocsVersion")
+			dokkaPlugin("dev.opensavvy.dokka.mkdocs:aggregator:$DokkaMkDocsVersion")
 		}
-
+		
 		moduleOutputFiles = formatDependencies.moduleOutputDirectories.incomingArtifactFiles
 	}
 
