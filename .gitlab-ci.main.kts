@@ -165,7 +165,7 @@ gitlabCi {
 
 		beforeScript {
 			shell("./docs/website/verify-marker.sh")
-			shell($$"./gradlew docs:website:embedDokkaIntoMkDocs -PappVersion=$project_version")
+			shell($$"./gradlew -p docs :website:embedDokkaIntoMkDocs -PappVersion=$project_version")
 			shell("cd docs/website")
 			shell("ls")
 			shell($$"""echo "repo_url: $CI_PROJECT_URL">>mkdocs.yml""")
