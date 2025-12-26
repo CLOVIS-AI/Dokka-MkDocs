@@ -18,7 +18,7 @@ plugins {
 	// In these cases, we explicitly tell Gradle not to apply them.
 	alias(libsCommon.plugins.kotlin) apply false
 	alias(libsCommon.plugins.kotlin.jvm) apply false
-	alias(libsCommon.plugins.kotest) apply false
+	alias(libsCommon.plugins.ksp) apply false
 	alias(libsCommon.plugins.kotlinx.serialization) apply false
 	alias(libsCommon.plugins.kotlinx.powerAssert) apply false
 }
@@ -52,6 +52,26 @@ if (group == "dev.opensavvy.playground") {
 plugins.withType(org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin::class.java) {
 	the<YarnRootExtension>().yarnLockMismatchReport = YarnLockMismatchReport.NONE
 	the<YarnRootExtension>().yarnLockAutoReplace = true
+}
+
+// endregion
+// region Configure Dokka overrides
+
+dokka {
+	pluginsConfiguration.html {
+		templatesDir.set(file("docs/dokka/overrides"))
+	}
+}
+
+// endregion
+// region NodeJS version
+
+project.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin> {
+	project.the<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec>().version.set(libsCommon.versions.nodejs)
+}
+
+project.plugins.withType<org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsPlugin> {
+	project.the<org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec>().version.set(libsCommon.versions.nodejs)
 }
 
 // endregion
