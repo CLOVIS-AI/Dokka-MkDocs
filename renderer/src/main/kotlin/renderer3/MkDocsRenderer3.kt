@@ -105,7 +105,6 @@ class MkDocsRenderer3(
 
 		with(context) {
 			buildFrontMatter()
-			buildNavigation()
 			buildContent(page.content)
 		}
 
