@@ -45,27 +45,5 @@ internal fun RenderingContext.buildFrontMatter() {
 	appendLine()
 }
 
-internal fun RenderingContext.buildNavigation() {
-	var first = true
-
-	val targets = locations.ancestors(page).asReversed()
-		.filter { it.name.isNotBlank() }
-		.takeIf { it.size > 1 } // Don't render the navigation bar for module pages
-		?.forEach { node ->
-			if (first) {
-				first = false
-			} else {
-				append(" • ")
-			}
-
-			if (node.isNavigable) buildLink(node, page)
-			else append(node.name)
-		}
-	appendLine()
-	if (targets != null)
-		appendLine(" { data-search-exclude }")
-	appendLine()
-}
-
 private val PageNode.isNavigable: Boolean
 	get() = this !is RendererSpecificPage || strategy != RenderingStrategy.DoNothing
