@@ -17,9 +17,10 @@
 package opensavvy.dokka.material.mkdocs.renderer3
 
 import org.jetbrains.dokka.pages.ContentComposite
+import org.jetbrains.dokka.pages.Style
 import org.jetbrains.dokka.pages.TextStyle
 
-private val groupStyles = mapOf(
+private val groupStyles: Map<out Style, Decorator> = mapOf(
 	TextStyle.Monospace to Decorator { content ->
 		if (!this.isInCodeBlock)
 			append("<div class=\"highlight\"><pre><code class=\"md-code__content\"><span markdown>")
@@ -40,6 +41,15 @@ private val groupStyles = mapOf(
 		content()
 		appendLine()
 		appendLine("</blockquote>")
+	},
+	MultilineSignatureStyle.Wrapped to Decorator { content ->
+		content()
+		appendLine()
+	},
+	MultilineSignatureStyle.Indented to Decorator { content ->
+		appendLine()
+		append("    ")
+		content()
 	}
 )
 
