@@ -18,6 +18,7 @@ package opensavvy.dokka.material.mkdocs
 
 import opensavvy.dokka.material.mkdocs.location.MarkdownLocationProvider
 import opensavvy.dokka.material.mkdocs.renderer.BriefCommentPreprocessor
+import opensavvy.dokka.material.mkdocs.renderer.SignatureBreaklineTransformer
 import opensavvy.dokka.material.mkdocs.renderer3.MkDocsRenderer3
 import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.DokkaBase
@@ -50,6 +51,10 @@ class MaterialForMkDocsPlugin : DokkaPlugin() {
 
 	val briefCommentPreprocessor: Extension<PageTransformer, *, *> by extending {
 		mkdocsPreprocessor with BriefCommentPreprocessor()
+	}
+
+	val signatureBreaklineTransformer: Extension<PageTransformer, *, *> by extending {
+		mkdocsPreprocessor with SignatureBreaklineTransformer()
 	}
 
 	val packageListCreator: Extension<PageTransformer, *, *> by extending {

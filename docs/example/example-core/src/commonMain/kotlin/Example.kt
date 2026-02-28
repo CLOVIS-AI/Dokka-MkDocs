@@ -75,6 +75,19 @@ fun topLevelFunction(): Int {
 }
 
 /**
+ * This is another top-level function with multiple parameters.
+ */
+fun anotherTopLevelFunction(
+	param1: String,
+	param2: Int,
+	param3: Boolean,
+	param4: String = "default",
+	onAction: () -> Unit
+): Int {
+	TODO()
+}
+
+/**
  * This is a typealias.
  *
  * I don't really know what to write here, but it needs to spend multiple paragraphs.
