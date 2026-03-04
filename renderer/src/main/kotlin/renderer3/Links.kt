@@ -21,7 +21,7 @@ import org.jetbrains.dokka.pages.ContentResolvedLink
 import org.jetbrains.dokka.pages.PageNode
 
 internal fun RenderingContext.buildLink(to: PageNode, from: PageNode) =
-	buildLink(locations.resolve(to, from, skipExtension = true)!! + ".html") {
+	buildLink(resolveInternalLink(locations.resolve(to, from)!!)) {
 		append(to.name)
 	}
 
@@ -42,14 +42,10 @@ internal fun RenderingContext.buildLink(address: String, isCode: Boolean = false
 }
 
 internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
-	var address = locations.resolve(link.address, link.sourceSets, page)
-
-	if (address != null && address.endsWith(".md")) {
-		address = address.removeSuffix(".md") + ".html"
-	}
+	val address = locations.resolve(link.address, link.sourceSets, page)
 
 	if (address != null) {
-		buildLink(address, isCode = true) {
+		buildLink(resolveInternalLink(address), isCode = true) {
 			buildGroup(link)
 		}
 	} else {
@@ -62,3 +58,10 @@ internal fun RenderingContext.buildResolvedLink(link: ContentResolvedLink) {
 		buildGroup(link)
 	}
 }
+
+private fun RenderingContext.resolveInternalLink(address: String): String =
+	if (isInCodeBlock && address.endsWith(".md")) {
+		"${address.removeSuffix(".md")}.html"
+	} else {
+		address
+	}
