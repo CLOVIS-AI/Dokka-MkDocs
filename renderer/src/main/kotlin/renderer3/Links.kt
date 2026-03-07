@@ -18,6 +18,12 @@ package opensavvy.dokka.material.mkdocs.renderer3
 
 import org.jetbrains.dokka.pages.ContentDRILink
 import org.jetbrains.dokka.pages.ContentResolvedLink
+import org.jetbrains.dokka.pages.PageNode
+
+internal fun RenderingContext.buildLink(to: PageNode, from: PageNode) =
+	buildLink(resolveInternalLink(locations.resolve(to, from)!!)) {
+		append(to.name)
+	}
 
 internal fun RenderingContext.buildLink(address: String, isCode: Boolean = false, label: RenderingContext.() -> Unit) {
 	if (isInCodeBlock) {
@@ -39,14 +45,7 @@ internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
 	val address = locations.resolve(link.address, link.sourceSets, page)
 
 	if (address != null) {
-		val linkAddress = if (isInCodeBlock && address.endsWith(".md")) {
-			// In code blocks, links are emitted as raw <a> tags, so MkDocs can't resolve .md targets; convert them to .html.
-			"${address.removeSuffix(".md")}.html"
-		} else {
-			address
-		}
-
-		buildLink(linkAddress, isCode = true) {
+		buildLink(resolveInternalLink(address), isCode = true) {
 			buildGroup(link)
 		}
 	} else {
@@ -59,3 +58,10 @@ internal fun RenderingContext.buildResolvedLink(link: ContentResolvedLink) {
 		buildGroup(link)
 	}
 }
+
+private fun RenderingContext.resolveInternalLink(address: String): String =
+	if (isInCodeBlock && address.endsWith(".md")) {
+		"${address.removeSuffix(".md")}.html"
+	} else {
+		address
+	}
