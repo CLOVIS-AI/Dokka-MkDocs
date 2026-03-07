@@ -59,9 +59,11 @@ internal fun RenderingContext.buildResolvedLink(link: ContentResolvedLink) {
 	}
 }
 
-private fun RenderingContext.resolveInternalLink(address: String): String =
-	if (isInCodeBlock && address.endsWith(".md")) {
+private fun RenderingContext.resolveInternalLink(address: String): String {
+	return if (isInCodeBlock && address.endsWith(".md")) {
+		// In code blocks, links are emitted as raw <a> tags, so MkDocs can't resolve .md targets; convert them to .html.
 		"${address.removeSuffix(".md")}.html"
 	} else {
 		address
 	}
+}
