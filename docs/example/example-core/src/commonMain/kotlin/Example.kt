@@ -58,6 +58,28 @@ class Example() : MyInterface {
 	fun foo(number: Int): Boolean {
 		TODO()
 	}
+
+	/**
+	 * This is a method from [MyInterface] that has been overridden by the [Example] class.
+	 */
+	override fun fromInterface2(): String =
+		"overridden"
+
+	/**
+	 * The companion object.
+	 *
+	 * Second line of documentation.
+	 */
+	companion object {
+		const val DEFAULT = 4
+	}
+
+	class Nested {
+
+		companion object {
+			const val DEFAULT = 5
+		}
+	}
 }
 
 /**
