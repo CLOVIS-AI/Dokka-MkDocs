@@ -5,5 +5,5 @@ plugins {
 
     // Some plugins *must* be configured on the root project.
     // In these cases, we explicitly tell Gradle not to apply them.
-    alias(opensavvyConventions.plugins.aligned.kotlin) apply false
+    alias(libsCommon.plugins.kotlin) apply false
 }

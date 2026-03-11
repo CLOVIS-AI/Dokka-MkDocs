@@ -6,6 +6,15 @@ dependencyResolutionManagement {
 		mavenCentral()
 		gradlePluginPortal()
 	}
+
+	versionCatalogs {
+		create("libs") {
+			from(files("../gradle/libs.versions.toml"))
+		}
+		create("libsCommon") {
+			from(files("../gradle/common.versions.toml"))
+		}
+	}
 }
 
 pluginManagement {
@@ -41,7 +50,7 @@ pluginManagement {
 }
 
 plugins {
-	id("dev.opensavvy.conventions.settings") version "1.5.1"
+	id("dev.opensavvy.conventions.settings") version "2.3.1"
 }
 
 includeBuild("..")
