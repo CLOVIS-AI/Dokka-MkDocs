@@ -213,9 +213,22 @@ gitlabCi {
 			shell("""echo "KTMONGO_URL=$(.gitlab/ci/review-url.sh docs-ktmongo/index.html)">>ktmongo.env""")
 		}
 
+		afterScript {
+			shell("echo \"# TYPE output_size gauge\" >>metrics.txt")
+			shell("echo \"# TYPE file_count gauge\" >>metrics.txt")
+			shell($$"""
+				result=$(du -sb docs-ktmongo | tr -s ' ')
+				size=$(<<<"$result" cut -f 1)
+				echo "output_size{path=ktmongo} $size" >>metrics.txt
+				count=$(find docs-ktmongo -type f | wc -l)
+				echo "file_count{path=ktmongo} $count" >>metrics.txt
+			""".trimIndent())
+		}
+
 		artifacts {
 			include("docs-ktmongo")
 			dotenv("ktmongo.env")
+			metrics("metrics.txt")
 		}
 
 		environment {
