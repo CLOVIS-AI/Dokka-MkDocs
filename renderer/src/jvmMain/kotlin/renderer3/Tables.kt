@@ -69,9 +69,13 @@ private fun RenderingContext.buildTableAsList(node: ContentTable) {
 
 	for (child in node.children) {
 		append(" - ")
-		for (section in child.children) {
+		for ((i, section) in child.children.withIndex()) {
+			if (i == 1)
+				append(": ") // The section #0 is the title
+			else if (i > 1)
+				append(" ")
+
 			buildContent(section)
-			append(" ")
 		}
 		appendLine()
 	}
