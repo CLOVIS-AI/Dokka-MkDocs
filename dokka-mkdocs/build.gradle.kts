@@ -1,5 +1,11 @@
 import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
 
+buildscript {
+	configurations.all {
+		resolutionStrategy.force(libsCommon.jetbrains.annotations)
+	}
+}
+
 plugins {
 	`kotlin-dsl`
 	alias(opensavvyConventions.plugins.base)
