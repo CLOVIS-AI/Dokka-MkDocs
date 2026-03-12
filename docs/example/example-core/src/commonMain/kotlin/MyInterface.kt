@@ -21,3 +21,13 @@ interface MyInterface {
 	 */
 	fun fromInterface2(): String
 }
+
+/**
+ * A fake constructor that instantiates a [MyInterface] instance.
+ *
+ * ### Implementation details
+ *
+ * It uses the [Example] class.
+ */
+fun MyInterface(): MyInterface =
+	Example()
