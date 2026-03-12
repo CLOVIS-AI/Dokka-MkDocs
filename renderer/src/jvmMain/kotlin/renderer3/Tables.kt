@@ -30,11 +30,11 @@ internal fun RenderingContext.buildTable(node: ContentTable) {
 			buildTableAsSections(node)
 		}
 
-		ContentKind.Inheritors, ContentKind.Comment -> {
+		ContentKind.Inheritors, ContentKind.Comment, ContentKind.Parameters -> {
 			buildTableAsList(node)
 		}
 
-		ContentKind.Main, ContentKind.Parameters -> {
+		ContentKind.Main -> {
 			buildTableAsDefinitions(node)
 		}
 
