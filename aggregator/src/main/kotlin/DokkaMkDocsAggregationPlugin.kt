@@ -23,7 +23,6 @@ package opensavvy.dokka.material.mkdocs.aggregator
 import opensavvy.dokka.material.mkdocs.MaterialForMkDocsPlugin
 import opensavvy.dokka.material.mkdocs.location.MarkdownLocationProvider
 import org.jetbrains.dokka.allModulesPage.AllModulesPagePlugin
-import org.jetbrains.dokka.allModulesPage.MultimoduleLocationProvider
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.base.resolvers.local.LocationProviderFactory
 import org.jetbrains.dokka.plugability.DokkaPlugin
@@ -38,18 +37,33 @@ class DokkaMkDocsAggregationPlugin : DokkaPlugin() {
 	private val allModulesPagePlugin by lazy { plugin<AllModulesPagePlugin>() }
 	private val templateProcessingPlugin by lazy { plugin<TemplatingPlugin>() }
 	private val mkdocsPlugin by lazy { plugin<MaterialForMkDocsPlugin>() }
-	private val dokkaBase by lazy { plugin<DokkaBase>()}
+	private val dokkaBase by lazy { plugin<DokkaBase>() }
 
+	/**
+	 * Processes GFM template commands (e.g., cross-module `ResolveLinkGfmCommand`) in generated `.md` files.
+	 * Must be registered before the fallback strategy.
+	 */
 	val mkdocsTemplatingStrategy: Extension<TemplateProcessingStrategy, *, *> by extending {
 		(templateProcessingPlugin.templateProcessingStrategy
 			providing ::DokkaMkDocsTemplatingStrategy
 			order { before(templateProcessingPlugin.fallbackProcessingStrategy) })
 	}
 
+	/**
+	 * Overrides the location provider for the aggregated publication to use Markdown (`.md`) links
+	 * instead of the default HTML links, and to resolve cross-module references correctly.
+	 */
 	val mkdocsLocationProvider: Extension<LocationProviderFactory, *, *> by extending {
-		dokkaBase.locationProviderFactory providing MultimoduleLocationProvider::Factory override listOf(mkdocsPlugin.locationProvider, allModulesPagePlugin.multimoduleLocationProvider)
+		dokkaBase.locationProviderFactory providing MarkdownMultimoduleLocationProvider::Factory override listOf(
+			mkdocsPlugin.locationProvider,
+			allModulesPagePlugin.multimoduleLocationProvider,
+		)
 	}
 
+	/**
+	 * Overrides the partial location provider (used when resolving cross-module links from partial outputs)
+	 * to use Markdown (`.md`) links.
+	 */
 	val mkdocsPartialLocationProvider: Extension<LocationProviderFactory, *, *> by extending {
 		allModulesPagePlugin.partialLocationProviderFactory providing MarkdownLocationProvider::Factory override allModulesPagePlugin.baseLocationProviderFactory
 	}
