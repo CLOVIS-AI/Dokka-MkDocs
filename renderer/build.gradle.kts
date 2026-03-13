@@ -17,6 +17,8 @@ dependencies {
 	implementation(libs.kotlinx.coroutines)
 	compileOnly(libs.dokka.base)
 	compileOnly(libs.dokka.core)
+	compileOnly(libs.dokka.templating)
+	compileOnly(libs.dokka.allModulesPage)
 }
 
 publishing {
