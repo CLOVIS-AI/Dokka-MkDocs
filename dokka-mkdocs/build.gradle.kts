@@ -15,6 +15,7 @@ plugins {
 
 dependencies {
 	implementation(libs.gradle.dokka)
+	compileOnly(kotlin("gradle-plugin"))
 }
 
 gradlePlugin {
@@ -41,6 +42,7 @@ val embedCurrentVersion by tasks.registering {
 	description = "Embeds the current version into the source code"
 
 	val version = project.version as String
+	val dokkaVersion = libs.versions.dokka.get()
 	val file = File(kotlin.sourceSets.main.get().kotlin.srcDirs.first(), "version.kt")
 
 	inputs.property("version", version)
@@ -52,6 +54,7 @@ val embedCurrentVersion by tasks.registering {
 				// Generated file, do not edit
 				package opensavvy.dokka.gradle
 				internal const val DokkaMkDocsVersion = "$version"
+				internal const val DokkaVersion = "$dokkaVersion"
 			""".trimIndent()
 		)
 	}
