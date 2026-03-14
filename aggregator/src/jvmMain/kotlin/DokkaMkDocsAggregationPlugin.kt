@@ -41,7 +41,7 @@ class DokkaMkDocsAggregationPlugin : DokkaPlugin() {
 	private val dokkaBase by lazy { plugin<DokkaBase>() }
 
 	/**
-	 * Processes GFM template commands (e.g., cross-module `ResolveLinkGfmCommand`) in generated `.md` files.
+	 * Processes GFM template commands (e.g., cross-module link resolution) in generated `.md` files.
 	 * Must be registered before the fallback strategy.
 	 */
 	val mkdocsTemplatingStrategy: Extension<TemplateProcessingStrategy, *, *> by extending {

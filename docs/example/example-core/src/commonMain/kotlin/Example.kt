@@ -20,7 +20,7 @@ package opensavvy.dokka.material.mkdocs.example
  *
  * @constructor Public constructor for the [Example] class.
  */
-class Example() {
+class Example() : MyInterface {
 
 	/**
 	 * A value that increments by one each time it is accessed.

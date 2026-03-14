@@ -1,8 +1,4 @@
 /*
- * Copyright 2014-2024 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license.
- */
-
-/*
  * Copyright (c) 2025, OpenSavvy and contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,24 +16,21 @@
 
 package opensavvy.dokka.material.mkdocs.aggregator
 
-import opensavvy.dokka.material.mkdocs.GfmCommand
-import opensavvy.dokka.material.mkdocs.GfmCommand.Companion.command
-import opensavvy.dokka.material.mkdocs.GfmCommand.Companion.label
-import opensavvy.dokka.material.mkdocs.GfmCommand.Companion.templateCommandRegex
-import opensavvy.dokka.material.mkdocs.ResolveLinkGfmCommand
+import opensavvy.dokka.material.mkdocs.renderer3.DeferredLinkCommand
+import opensavvy.dokka.material.mkdocs.renderer3.DeferredLinkCommand.Companion.deferredCommandRegex
+import opensavvy.dokka.material.mkdocs.renderer3.DeferredLinkCommand.Companion.deferredLinkCommand
+import opensavvy.dokka.material.mkdocs.renderer3.DeferredLinkCommand.Companion.deferredLinkLabel
 import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.dokka.allModulesPage.AllModulesPagePlugin
 import org.jetbrains.dokka.base.templating.parseJson
-import org.jetbrains.dokka.links.DRI
 import org.jetbrains.dokka.plugability.DokkaContext
 import org.jetbrains.dokka.plugability.plugin
 import org.jetbrains.dokka.plugability.querySingle
 import org.jetbrains.dokka.templates.TemplateProcessingStrategy
-import java.io.BufferedWriter
 import java.io.File
 
 class DokkaMkDocsTemplatingStrategy(
-	val context: DokkaContext
+	context: DokkaContext
 ) : TemplateProcessingStrategy {
 
 	private val externalModuleLinkResolver =
@@ -45,43 +38,17 @@ class DokkaMkDocsTemplatingStrategy(
 
 	override fun process(input: File, output: File, moduleContext: DokkaConfiguration.DokkaModuleDescription?): Boolean =
 		if (input.isFile && input.extension == "md") {
-			input.bufferedReader().use { reader ->
-				//This should also work whenever we have a misconfigured dokka and output is pointing to the input
-				//the same way that html processing does
-				if (input.absolutePath == output.absolutePath) {
-					context.logger.info("Attempting to process MkDocs templates in place for directory $input, this suggests miss configuration.")
-					val lines = reader.readLines()
-					output.bufferedWriter().use { writer ->
-						lines.forEach { line ->
-							writer.processAndWrite(line, output)
-						}
-					}
-				} else {
-					output.bufferedWriter().use { writer ->
-						reader.lineSequence().forEach { line ->
-							writer.processAndWrite(line, output)
-						}
-					}
-				}
+			val processed = input.readText().replace(deferredCommandRegex) { match ->
+				val command = parseJson<DeferredLinkCommand>(match.deferredLinkCommand)
+				externalModuleLinkResolver.resolve(command.dri, output)?.let { address ->
+					command.format(address, match.deferredLinkLabel)
+				} ?: match.deferredLinkLabel
 			}
+
+			output.parentFile?.mkdirs()
+			output.writeText(processed)
 			true
-		} else false
-
-	private fun BufferedWriter.processAndWrite(line: String, output: File) =
-		processLine(line, output).run {
-			write(this)
-			newLine()
+		} else {
+			false
 		}
-
-	private fun processLine(line: String, output: File): String =
-		line.replace(templateCommandRegex) {
-			when (val command = parseJson<GfmCommand>(it.command)) {
-				is ResolveLinkGfmCommand -> resolveLink(output, command.dri, it.label)
-			}
-		}
-
-	private fun resolveLink(fileContext: File, dri: DRI, label: String): String =
-		externalModuleLinkResolver.resolve(dri, fileContext)?.let { address ->
-			"[$label]($address)"
-		} ?: label
 }

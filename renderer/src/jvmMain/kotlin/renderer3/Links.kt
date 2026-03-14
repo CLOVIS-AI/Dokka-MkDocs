@@ -18,16 +18,21 @@ package opensavvy.dokka.material.mkdocs.renderer3
 
 import org.jetbrains.dokka.pages.ContentDRILink
 import org.jetbrains.dokka.pages.ContentResolvedLink
-import org.jetbrains.dokka.pages.PageNode
 
-internal fun RenderingContext.buildLink(to: PageNode, from: PageNode) =
-	buildLink(resolveInternalLink(locations.resolve(to, from)!!)) {
-		append(to.name)
-	}
-
-internal fun RenderingContext.buildLink(address: String, isCode: Boolean = false, label: RenderingContext.() -> Unit) {
+internal fun Appendable.buildLink(
+	address: String,
+	isInCodeBlock: Boolean,
+	isCode: Boolean,
+	label: Appendable.() -> Unit,
+) {
 	if (isInCodeBlock) {
-		append("<a href=\"$address\">")
+		// mkdocs cannot replace links within code blocks, so we do the .md -> .html substitution directly.
+		val actualAddress = if (address.endsWith(".md"))
+			address.removeSuffix(".md") + ".html"
+		else
+			address
+
+		append("<a href=\"$actualAddress\">")
 		label()
 		append("</a>")
 	} else {
@@ -42,24 +47,36 @@ internal fun RenderingContext.buildLink(address: String, isCode: Boolean = false
 }
 
 internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
-	val address = locations.resolve(link.address, link.sourceSets, page)
+	val resolvedAddress = locations.resolve(link.address, link.sourceSets, page)
 
-	if (address != null) {
+	// Links to the module-level page shouldn't appear as code, since the module has a display name
+	// Apparently, Dokka represents this as the package name '.ext'.
+	val isCode = link.address.packageName != ".ext"
+
+	if (resolvedAddress != null) {
 		buildLink(
-			resolveInternalLink(address),
-			// Links to the module-level page shouldn't appear as code, since the module has a display name
-			// Apparently, Dokka represents this as the package name '.ext'.
-			isCode = link.address.packageName != ".ext",
+			resolveInternalLink(resolvedAddress),
+			isInCodeBlock = this.isInCodeBlock,
+			isCode = isCode,
 		) {
 			buildGroup(link)
 		}
 	} else {
-		buildGroup(link)
+		buildDeferredLink(
+			link = link,
+			isCode = isCode,
+		) {
+			buildGroup(link)
+		}
 	}
 }
 
 internal fun RenderingContext.buildResolvedLink(link: ContentResolvedLink) {
-	buildLink(link.address) {
+	buildLink(
+		link.address,
+		isInCodeBlock = this.isInCodeBlock,
+		isCode = false,
+	) {
 		buildGroup(link)
 	}
 }
