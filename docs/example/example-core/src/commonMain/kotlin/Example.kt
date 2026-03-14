@@ -125,3 +125,8 @@ typealias ExampleAlias = Example
  */
 @Suppress("RedundantSuspendModifier")
 suspend inline fun <reified T> ExampleAlias.foo2(): T = TODO()
+
+/**
+ * Extension property for [ExampleAlias].
+ */
+val ExampleAlias.prop2: String get() = "prop2"
