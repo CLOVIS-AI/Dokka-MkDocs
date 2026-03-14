@@ -35,7 +35,7 @@ dependencies {
 }
 ```
 
-1. Latest version: <a href="https://search.maven.org/search?q=g:%22dev.opensavvy.dokka.mkdocs%22%20AND%20a:%22dokka-mkdocs%22"><img src="https://img.shields.io/maven-central/v/dev.opensavvy.dokka.mkdocs/dokka-mkdocs.svg?label=Maven%20Central"></a> <br/> All versions: [Release list](https://gitlab.com/opensavvy/automation/dokka-material-mkdocs/-/releases)
+1. To know what the latest version is, visit [the news](news/index.md).
 
 Each Gradle project that you want to include in the website should be added to the `dependencies` block.
 You may include as many projects as you want.
