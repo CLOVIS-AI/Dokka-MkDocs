@@ -3,7 +3,7 @@ package opensavvy.dokka.material.mkdocs.example
 /**
  * Simple interface.
  */
-interface MyInterface {
+sealed interface MyInterface {
 
 	/**
 	 * This is a method from the interface [MyInterface].
