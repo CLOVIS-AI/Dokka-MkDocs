@@ -161,7 +161,12 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 							}
 
 							file.isDirectory -> {
-								builder.appendLine("$indent- \"${relative.name.decodeAsDokkaUrl()}\":")
+								if ('/' !in relative.path) {
+									// Module name: keep the technical name
+									builder.appendLine("$indent- \"${relative.name}\":")
+								} else {
+									builder.appendLine("$indent- \"${relative.name.decodeAsDokkaUrl()}\":")
+								}
 							}
 
 							file.isFile && file.name.endsWith(".md") -> {
