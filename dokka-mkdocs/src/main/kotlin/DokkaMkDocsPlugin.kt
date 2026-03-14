@@ -137,10 +137,16 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 							a.isDirectory && b in a -> -1
 							b.isDirectory && a in b -> 1
 							else -> {
-								// \u00001 because it's the smallest invisible character, so directories will be listed first
-								val aPath = aR.path.split(File.separatorChar).joinToString("\u0001") { it.decodeAsDokkaUrl() }
-								val bPath = bR.path.split(File.separatorChar).joinToString("\u0001") { it.decodeAsDokkaUrl() }
-								aPath.compareTo(bPath)
+								// \u0000 for index.md
+								// \u0001 for directories
+								// \u0002 for files
+								val aParts = aR.path.split(File.separatorChar)
+								val bParts = bR.path.split(File.separatorChar)
+
+								val aPath = buildComparisonName(aParts, a)
+								val bPath = buildComparisonName(bParts, b)
+
+								aPath.compareTo(bPath, ignoreCase = true)
 							}
 						}
 					}
@@ -220,6 +226,14 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		}
 	}
 
+	private fun buildComparisonName(pathSegments: List<String>, file: File): String = pathSegments.mapIndexed { index, s ->
+		when {
+			s == "index.md" -> "\u0000"
+			index < pathSegments.size - 1 || file.isDirectory -> "\u0001${s.decodeAsDokkaUrl()}"
+			else -> "\u0002${s.decodeAsDokkaUrl()}"
+		}
+	}.joinToString("\u0003")
+
 	@OptIn(InternalDokkaGradlePluginApi::class)
 	private fun fixKmpCommonSourceSetClasspath(target: Project) {
 		val kmpExtension = target.extensions.getByType(KotlinMultiplatformExtension::class.java)
@@ -264,15 +278,17 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 }
 
 fun String.decodeAsDokkaUrl(): String {
-	if (this.contains('-') && !this.startsWith("-")) {
-		return this.split('-').joinToString(" ") { it.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
+	val decoded = if (this.contains('-') && !this.startsWith("-")) {
+		this.split('-').joinToString(" ") { it.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
+	} else {
+		var result = this
+		var index: Int
+		while (result.indexOf('-').also { index = it } >= 0) {
+			result = result.substring(0 until index) + (result.getOrNull(index + 1)?.uppercase() ?: "") + result.substring((index + 2).coerceAtMost(result.length))
+		}
+		result
 	}
-	var result = this
-	var index: Int
-	while (result.indexOf('-').also { index = it } >= 0) {
-		result = result.substring(0 until index) + result[index + 1].uppercase() + result.substring(index + 2)
-	}
-	return result
+	return decoded.replaceFirstChar { it.uppercaseChar() }
 }
 
 operator fun File.contains(child: File): Boolean {
