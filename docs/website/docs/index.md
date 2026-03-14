@@ -12,4 +12,4 @@ Dokka in Material for MkDocs is a Gradle plugin using Dokka to extract documenta
 This plugin should work for any kind of project supported by Dokka: Kotlin/JVM, Kotlin/Multiplatform, etc.
 This also includes extracting Java source comments from mixed Java/Kotlin projects.
 
-This project is very early in development. If you find something missing, or a stability issue, please [create an issue](https://gitlab.com/opensavvy/automation/dokka-material-mkdocs/-/issues/new) or [email us](mailto:contact-project+opensavvy-automation-dokka-material-mkdocs-60473792-issue-@incoming.gitlab.com).
+The project has reached beta stability: we expect that there may be bugs or edge cases left, but we don't intend on breaking URLs. If you find something missing, or a stability issue, please [create an issue](https://gitlab.com/opensavvy/automation/dokka-material-mkdocs/-/issues/new) or [email us](mailto:contact-project+opensavvy-automation-dokka-material-mkdocs-60473792-issue-@incoming.gitlab.com).
