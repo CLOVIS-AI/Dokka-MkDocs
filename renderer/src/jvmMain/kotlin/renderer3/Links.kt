@@ -45,7 +45,12 @@ internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
 	val address = locations.resolve(link.address, link.sourceSets, page)
 
 	if (address != null) {
-		buildLink(resolveInternalLink(address), isCode = true) {
+		buildLink(
+			resolveInternalLink(address),
+			// Links to the module-level page shouldn't appear as code, since the module has a display name
+			// Apparently, Dokka represents this as the package name '.ext'.
+			isCode = link.address.packageName != ".ext",
+		) {
 			buildGroup(link)
 		}
 	} else {
