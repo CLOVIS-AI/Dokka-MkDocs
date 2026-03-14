@@ -134,9 +134,14 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 						val bR = b.relativeTo(root)
 
 						when {
-							aR.isDirectory && aR in bR -> -1
-							bR.isDirectory && bR in aR -> 1
-							else -> aR.path.replace(File.separatorChar, '\u0001').decodeAsDokkaUrl().compareTo(bR.path.replace(File.separatorChar, '\u0001').decodeAsDokkaUrl())
+							a.isDirectory && b in a -> -1
+							b.isDirectory && a in b -> 1
+							else -> {
+								// \u00001 because it's the smallest invisible character, so directories will be listed first
+								val aPath = aR.path.split(File.separatorChar).joinToString("\u0001") { it.decodeAsDokkaUrl() }
+								val bPath = bR.path.split(File.separatorChar).joinToString("\u0001") { it.decodeAsDokkaUrl() }
+								aPath.compareTo(bPath)
+							}
 						}
 					}
 					.forEach { file ->
