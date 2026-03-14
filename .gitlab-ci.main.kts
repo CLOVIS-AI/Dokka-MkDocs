@@ -192,6 +192,55 @@ gitlabCi {
 	}
 
 	// endregion
+	// region Test in real projects
+
+	val documentKtMongo by job(stage = build) {
+		opensavvyImage("mkdocs")
+
+		script {
+			shell("git clone --depth=1 https://gitlab.com/opensavvy/ktmongo.git /tmp/ktmongo")
+			shell("cd /tmp/ktmongo")
+			shell($$"./gradlew docs:website:embedDokkaIntoMkDocs -PappVersion=$project_version --include-build=$CI_PROJECT_DIR")
+			shell("cd docs/website")
+			shell("ls")
+			shell($$"""echo "repo_url: https://gitlab.com/opensavvy/ktmongo">>mkdocs.yml""")
+			shell($$"""echo "repo_name: KtMongo">>mkdocs.yml""")
+			shell($$"""echo "site_url: https://ktmongo.opensavvy.dev">>mkdocs.yml""")
+			shell($$"mkdocs build --site-dir $CI_PROJECT_DIR/docs-ktmongo")
+		}
+
+		afterScript {
+			shell("""echo "KTMONGO_URL=$(.gitlab/ci/review-url.sh docs-ktmongo/index.html)">>ktmongo.env""")
+		}
+
+		afterScript {
+			shell("echo \"# TYPE output_size gauge\" >>metrics.txt")
+			shell("echo \"# TYPE file_count gauge\" >>metrics.txt")
+			shell($$"""
+				result=$(du -sb docs-ktmongo | tr -s ' ')
+				size=$(<<<"$result" cut -f 1)
+				echo "output_size{path=ktmongo} $size" >>metrics.txt
+				count=$(find docs-ktmongo -type f | wc -l)
+				echo "file_count{path=ktmongo} $count" >>metrics.txt
+			""".trimIndent())
+		}
+
+		artifacts {
+			include("docs-ktmongo")
+			dotenv("ktmongo.env")
+			metrics("metrics.txt")
+		}
+
+		environment {
+			name("review/${Variable.Commit.Ref.slug}/ktmongo")
+			url($$"$KTMONGO_URL")
+			tier(Development)
+		}
+
+		interruptible(true)
+	}
+
+	// endregion
 	// region Documentation
 
 	val mkdocs by job(stage = build) {
