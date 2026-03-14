@@ -117,56 +117,76 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 			doLast {
 				val root = siteOutput.asFile
-				val builder = StringBuilder()
-
-				root.walkBottomUp()
+				val files = root.walkBottomUp()
 					.onEnter { file ->
 						// Ignore directories that only contain other directories
 						file.walkBottomUp().any { it.isFile }
-					}
-					.sortedWith { a, b ->
-						// Very ugly code :/ Our goal:
-						// ①. A directory should be immediately before its contents
-						// ②. If a file has the same name as a directory, it should be just after the directory's contents
-						// ③. Everything else should be placed alphabetically.
+					}.toList()
 
-						val aR = a.relativeTo(root)
-						val bR = b.relativeTo(root)
+				// 1. Determine logical parents
+				val logicalParents = mutableMapOf<File, File>()
+				val allDirs = files.filter { it.isDirectory }.sortedBy { it.path.length }
 
-						when {
-							a.isDirectory && b in a -> -1
-							b.isDirectory && a in b -> 1
-							else -> {
-								// \u0000 for index.md
-								// \u0001 for directories
-								// \u0002 for files
-								val aParts = aR.path.split(File.separatorChar)
-								val bParts = bR.path.split(File.separatorChar)
+				for (dir in allDirs) {
+					if (dir == root) continue
+					val physicalParent = dir.parentFile
 
-								val aPath = buildComparisonName(aParts, a)
-								val bPath = buildComparisonName(bParts, b)
+					// Look for sibling packages that are parents of this one
+					val logicalParent = allDirs.filter {
+						it.parentFile == physicalParent &&
+							dir.name.startsWith(it.name + ".")
+					}.maxByOrNull { it.name.length }
 
-								aPath.compareTo(bPath, ignoreCase = true)
+					logicalParents[dir] = logicalParent ?: physicalParent
+				}
+
+				for (file in files.filter { it.isFile }) {
+					logicalParents[file] = file.parentFile
+				}
+
+				// 2. Build the tree
+				class Node(val file: File, val name: String) {
+					val children = mutableListOf<Node>()
+
+					fun sort() {
+						children.sortWith { a, b ->
+							if (a.file.name == "index.md") return@sortWith -1
+							if (b.file.name == "index.md") return@sortWith 1
+
+							val aIsDir = a.file.isDirectory
+							val bIsDir = b.file.isDirectory
+
+							if (aIsDir && bIsDir) {
+								val aIsPackage = a.name.startsWith("Package ")
+								val bIsPackage = b.name.startsWith("Package ")
+								if (aIsPackage != bIsPackage) return@sortWith if (aIsPackage) -1 else 1
 							}
+
+							if (aIsDir != bIsDir) return@sortWith if (aIsDir) -1 else 1
+
+							a.name.compareTo(b.name, ignoreCase = true)
 						}
+						children.forEach { it.sort() }
 					}
-					.forEach { file ->
-						val relative = file.relativeTo(root)
-						val depth = relative.path.count { it == File.separatorChar } + 1
+
+					fun render(builder: StringBuilder, depth: Int) {
 						val indent = "    ".repeat(depth) + "  "
+						val relative = file.relativeTo(root)
 
 						when {
 							file == root -> {
 								builder.appendLine("  - Reference (experimental):")
+								children.forEach { it.render(builder, 1) }
 							}
 
 							file.isDirectory -> {
-								if ('/' !in relative.path) {
-									// Module name: keep the technical name
-									builder.appendLine("$indent- \"${relative.name}\":")
+								val displayName = if (name.startsWith("Package ")) {
+									name.removePrefix("Package ")
 								} else {
-									builder.appendLine("$indent- \"${relative.name.decodeAsDokkaUrl()}\":")
+									name
 								}
+								builder.appendLine("$indent- \"$displayName\":")
+								children.forEach { it.render(builder, depth + 1) }
 							}
 
 							file.isFile && file.name.endsWith(".md") -> {
@@ -174,6 +194,48 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 							}
 						}
 					}
+				}
+
+				val nodes = mutableMapOf<File, Node>()
+				val rootNode = Node(root, "")
+				nodes[root] = rootNode
+
+				for (file in files.sortedBy { it.path.length }) {
+					if (file == root) continue
+					val logicalParent = logicalParents[file] ?: root
+					val parentNode = nodes[logicalParent] ?: rootNode
+					val isParentPackage = parentNode.name.startsWith("Package ")
+					val isParentModule = logicalParent.isDirectory && logicalParent.parentFile == root
+
+					var displayName = file.name
+					var isPackage = false
+					if (file.isDirectory) {
+						if (isParentModule) {
+							isPackage = true
+						} else if (isParentPackage) {
+							if (file.name.startsWith(logicalParent.name + ".")) {
+								displayName = file.name.removePrefix(logicalParent.name + ".")
+								isPackage = true
+							}
+						}
+					}
+
+					val isModule = logicalParent == root && file.isDirectory
+					val prettyName = if (isModule)
+						displayName
+					else
+						displayName.decodeAsDokkaUrl(capitalize = !isPackage)
+
+					val finalName = if (isPackage) "Package $prettyName" else prettyName
+
+					val node = Node(file, finalName)
+					nodes[file] = node
+					parentNode.children.add(node)
+				}
+
+				rootNode.sort()
+				val builder = StringBuilder()
+				rootNode.render(builder, 0)
 
 				navOutput.get().asFile.writeText(builder.toString())
 			}
@@ -231,14 +293,6 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		}
 	}
 
-	private fun buildComparisonName(pathSegments: List<String>, file: File): String = pathSegments.mapIndexed { index, s ->
-		when {
-			s == "index.md" -> "\u0000"
-			index < pathSegments.size - 1 || file.isDirectory -> "\u0001${s.decodeAsDokkaUrl()}"
-			else -> "\u0002${s.decodeAsDokkaUrl()}"
-		}
-	}.joinToString("\u0003")
-
 	@OptIn(InternalDokkaGradlePluginApi::class)
 	private fun fixKmpCommonSourceSetClasspath(target: Project) {
 		val kmpExtension = target.extensions.getByType(KotlinMultiplatformExtension::class.java)
@@ -282,18 +336,22 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 	}
 }
 
-fun String.decodeAsDokkaUrl(): String {
+fun String.decodeAsDokkaUrl(capitalize: Boolean = true): String {
 	val decoded = if (this.contains('-') && !this.startsWith("-")) {
-		this.split('-').joinToString(" ") { it.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
+		this.split('-').joinToString(" ") {
+			if (capitalize) it.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+			else it
+		}
 	} else {
 		var result = this
 		var index: Int
 		while (result.indexOf('-').also { index = it } >= 0) {
-			result = result.substring(0 until index) + (result.getOrNull(index + 1)?.uppercase() ?: "") + result.substring((index + 2).coerceAtMost(result.length))
+			val nextChar = result.getOrNull(index + 1)
+			result = result.substring(0 until index) + ((if (capitalize) nextChar?.uppercase() else nextChar?.toString()) ?: "") + result.substring((index + 2).coerceAtMost(result.length))
 		}
 		result
 	}
-	return decoded.replaceFirstChar { it.uppercaseChar() }
+	return if (capitalize) decoded.replaceFirstChar { it.uppercaseChar() } else decoded
 }
 
 operator fun File.contains(child: File): Boolean {
