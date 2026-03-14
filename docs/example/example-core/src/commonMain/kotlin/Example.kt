@@ -98,6 +98,8 @@ fun topLevelFunction(): Int {
 
 /**
  * This is another top-level function with multiple parameters.
+ *
+ * This a link to a method: [Example.foo].
  */
 fun anotherTopLevelFunction(
 	param1: String,
