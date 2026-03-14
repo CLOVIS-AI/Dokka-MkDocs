@@ -175,7 +175,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 						when {
 							file == root -> {
-								builder.appendLine("  - Reference (experimental):")
+								builder.appendLine("  - Reference:")
 								children.forEach { it.render(builder, 1) }
 							}
 
