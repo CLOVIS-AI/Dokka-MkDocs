@@ -1,32 +1,23 @@
 plugins {
 	alias(opensavvyConventions.plugins.base)
-	kotlin("jvm")
-	id("maven-publish")
-	alias(opensavvyConventions.plugins.kotlin.abstractLibrary)
-}
-
-java {
-	withSourcesJar()
+	alias(opensavvyConventions.plugins.kotlin.library)
 }
 
 kotlin {
-	jvmToolchain(8)
-}
+	jvm()
 
-dependencies {
-	implementation(libs.kotlinx.coroutines)
-	compileOnly(libs.dokka.base)
-	compileOnly(libs.dokka.core)
-	compileOnly(libs.dokka.templating)
-	compileOnly(libs.dokka.allModulesPage)
-}
-
-publishing {
-	publications {
-		register<MavenPublication>("renderer") {
-			from(components["java"])
-		}
+	sourceSets.jvmMain.dependencies {
+		implementation(libs.kotlinx.coroutines)
+		compileOnly(libs.dokka.base)
+		compileOnly(libs.dokka.core)
+		compileOnly(libs.dokka.templating)
+		compileOnly(libs.dokka.allModulesPage)
 	}
+
+}
+
+tapmoc {
+	java(8)
 }
 
 library {
