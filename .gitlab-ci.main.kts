@@ -205,6 +205,7 @@ gitlabCi {
 		script {
 			shell("git clone --depth=1 https://gitlab.com/opensavvy/ktmongo.git /tmp/ktmongo")
 			shell("cd /tmp/ktmongo")
+			shell("rm /tmp/ktmongo/gradle/gradle-daemon-jvm.properties") // TODO: remove after https://gitlab.com/opensavvy/automation/containers/-/merge_requests/33
 			shell("./gradlew javaToolchains")
 			shell($$"./gradlew docs:website:embedDokkaIntoMkDocs -PappVersion=$project_version --include-build=$CI_PROJECT_DIR")
 			shell("cd docs/website")
