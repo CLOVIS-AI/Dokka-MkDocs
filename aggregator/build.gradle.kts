@@ -8,12 +8,12 @@ kotlin {
 
 	sourceSets.jvmMain.dependencies {
 		implementation(libs.kotlinx.coroutines)
-		compileOnly(libs.dokka.base)
-		compileOnly(libs.dokka.core)
-		compileOnly(libs.dokka.templating)
-		compileOnly(libs.dokka.allModulesPage)
+		implementation(libs.dokka.base)
+		implementation(libs.dokka.core)
+		implementation(libs.dokka.templating)
+		implementation(libs.dokka.allModulesPage)
+		implementation(projects.renderer)
 	}
-
 }
 
 tapmoc {
@@ -21,8 +21,8 @@ tapmoc {
 }
 
 library {
-	name.set("Dokka renderer for Material for MkDocs")
-	description.set("Dokka plugin that adds the Material for MkDocs format")
+	name.set("Dokka aggregator for Material for MkDocs")
+	description.set("Dokka plugin that combines multiple modules generated with the Material for MkDocs format")
 	homeUrl.set("https://dokka-mkdocs.opensavvy.dev/")
 
 	license.set {

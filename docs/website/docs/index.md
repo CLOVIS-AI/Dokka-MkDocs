@@ -7,7 +7,7 @@ template: home.html
 Dokka in Material for MkDocs is a Gradle plugin using Dokka to extract documentation comments (KDoc) and embed them in a generated website.
 
 - [**Get started**](setup.md)
-- [**Visit the demo**](api/-library%20module/index.md)
+- [**Visit the demo**](api/example-core/index.md)
 
 This plugin should work for any kind of project supported by Dokka: Kotlin/JVM, Kotlin/Multiplatform, etc.
 This also includes extracting Java source comments from mixed Java/Kotlin projects.

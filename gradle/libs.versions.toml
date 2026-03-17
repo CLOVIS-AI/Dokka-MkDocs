@@ -1,7 +1,10 @@
 # List of dependencies of the project
 
 [versions]
+java-lowestGradle = "17" # https://docs.gradle.org/current/userguide/compatibility.html#java_runtime
+
 coroutines = "1.10.2"    # https://github.com/Kotlin/kotlinx.coroutines/releases
+
 dokka = "2.0.0"          # https://github.com/Kotlin/dokka/releases
 
 [plugins]
@@ -11,6 +14,8 @@ kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core",
 
 dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
 dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka" }
+dokka-templating = { module = "org.jetbrains.dokka:templating-plugin", version.ref = "dokka" }
+dokka-allModulesPage = { module = "org.jetbrains.dokka:all-modules-page-plugin", version.ref = "dokka" }
 
 gradle-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
