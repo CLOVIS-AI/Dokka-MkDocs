@@ -1,7 +1,10 @@
 # List of dependencies of the project
 
 [versions]
+java-lowestGradle = "17" # https://docs.gradle.org/current/userguide/compatibility.html#java_runtime
+
 coroutines = "1.10.2"    # https://github.com/Kotlin/kotlinx.coroutines/releases
+
 dokka = "2.0.0"          # https://github.com/Kotlin/dokka/releases
 
 [plugins]

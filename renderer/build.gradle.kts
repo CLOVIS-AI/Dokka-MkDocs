@@ -17,7 +17,7 @@ kotlin {
 }
 
 tapmoc {
-	java(8)
+	java(libs.versions.java.lowestGradle.get().toInt())
 }
 
 library {
