@@ -7,6 +7,8 @@ package opensavvy.dokka.material.mkdocs.location
 import org.jetbrains.dokka.base.resolvers.local.DokkaLocationProvider
 import org.jetbrains.dokka.base.resolvers.local.LocationProvider
 import org.jetbrains.dokka.base.resolvers.local.LocationProviderFactory
+import org.jetbrains.dokka.links.DRI
+import org.jetbrains.dokka.model.DisplaySourceSet
 import org.jetbrains.dokka.pages.*
 import org.jetbrains.dokka.plugability.DokkaContext
 import java.util.*
@@ -52,6 +54,21 @@ class MarkdownLocationProvider(
 		index[pageGraphRoot] = emptyList()
 		pageGraphRoot.children.forEach { registerPath(it, emptyList()) }
 		index
+	}
+	
+	override fun resolve(dri: DRI, sourceSets: Set<DisplaySourceSet>, context: PageNode?): String? {
+		val default = super.resolve(dri, sourceSets, context)
+		if (default != null && default.contains("#")) {
+			val anchor = if (dri.callable?.name == "<init>") {
+				dri.classNames
+			} else {
+				dri.callable?.name ?: dri.classNames
+			}
+			if (anchor != null) {
+				return default.substringBefore("#") + "#" + anchor.lowercase()
+			}
+		}
+		return default
 	}
 
 	class Factory(private val context: DokkaContext) : LocationProviderFactory {

@@ -23,13 +23,20 @@ import org.jetbrains.dokka.pages.ContentHeader
 internal fun RenderingContext.buildHeader(
 	header: ContentHeader,
 ) {
+
 	val decorator = when (header.level) {
 		1 -> Decoration.ofPrefix("# ")
 		2 -> Decoration.ofPrefix("## ")
 		3 -> Decoration.ofPrefix("### ")
 		4 -> Decoration.ofPrefix("#### ")
 		5 -> Decoration.ofPrefix("##### ")
-		else -> Decoration.ofPrefix("###### ")
+
+		else -> Decoration { content ->
+			append("**")
+			content()
+			append("**")
+			appendLine()
+		}
 	}
 
 	decorator.wrapIn(writer) {

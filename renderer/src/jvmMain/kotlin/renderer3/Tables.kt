@@ -30,11 +30,11 @@ internal fun RenderingContext.buildTable(node: ContentTable) {
 			buildTableAsSections(node)
 		}
 
-		ContentKind.Inheritors, ContentKind.Comment -> {
+		ContentKind.Inheritors, ContentKind.Comment, ContentKind.Parameters -> {
 			buildTableAsList(node)
 		}
 
-		ContentKind.Main, ContentKind.Parameters -> {
+		ContentKind.Main -> {
 			buildTableAsDefinitions(node)
 		}
 
@@ -69,9 +69,13 @@ private fun RenderingContext.buildTableAsList(node: ContentTable) {
 
 	for (child in node.children) {
 		append(" - ")
-		for (section in child.children) {
+		for ((i, section) in child.children.withIndex()) {
+			if (i == 1)
+				append(": ") // The section #0 is the title
+			else if (i > 1)
+				append(" ")
+
 			buildContent(section)
-			append(" ")
 		}
 		appendLine()
 	}

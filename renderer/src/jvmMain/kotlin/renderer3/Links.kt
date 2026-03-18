@@ -47,7 +47,11 @@ internal fun Appendable.buildLink(
 }
 
 internal fun RenderingContext.buildDRILink(link: ContentDRILink) {
-	val resolvedAddress = locations.resolve(link.address, link.sourceSets, page)
+	var resolvedAddress = locations.resolve(link.address, link.sourceSets, page)
+
+	if (resolvedAddress != null && isInCodeBlock && resolvedAddress.contains(".md")) {
+		resolvedAddress = resolvedAddress.replace(Regex("""\.md(#|$)"""), ".html$1")
+	}
 
 	// Links to the module-level page shouldn't appear as code, since the module has a display name
 	// Apparently, Dokka represents this as the package name '.ext'.
