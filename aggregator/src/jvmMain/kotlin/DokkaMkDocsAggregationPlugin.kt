@@ -31,6 +31,7 @@ import org.jetbrains.dokka.plugability.Extension
 import org.jetbrains.dokka.plugability.PluginApiPreviewAcknowledgement
 import org.jetbrains.dokka.templates.TemplateProcessingStrategy
 import org.jetbrains.dokka.templates.TemplatingPlugin
+import org.jetbrains.dokka.transformers.pages.PageTransformer
 
 class DokkaMkDocsAggregationPlugin : DokkaPlugin() {
 
@@ -40,7 +41,7 @@ class DokkaMkDocsAggregationPlugin : DokkaPlugin() {
 	private val dokkaBase by lazy { plugin<DokkaBase>() }
 
 	/**
-	 * Processes GFM template commands (e.g., cross-module `ResolveLinkGfmCommand`) in generated `.md` files.
+	 * Processes GFM template commands (e.g., cross-module link resolution) in generated `.md` files.
 	 * Must be registered before the fallback strategy.
 	 */
 	val mkdocsTemplatingStrategy: Extension<TemplateProcessingStrategy, *, *> by extending {
@@ -66,6 +67,12 @@ class DokkaMkDocsAggregationPlugin : DokkaPlugin() {
 	 */
 	val mkdocsPartialLocationProvider: Extension<LocationProviderFactory, *, *> by extending {
 		allModulesPagePlugin.partialLocationProviderFactory providing MarkdownLocationProvider::Factory override allModulesPagePlugin.baseLocationProviderFactory
+	}
+
+	val referencePageTransformer: Extension<PageTransformer, *, *> by extending {
+		mkdocsPlugin.mkdocsPreprocessor providing { ReferencePageTransformer() } order {
+			before(mkdocsPlugin.rootCreator)
+		}
 	}
 
 	@OptIn(DokkaPluginApiPreview::class)
