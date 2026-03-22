@@ -5,7 +5,7 @@ java-lowestGradle = "17" # https://docs.gradle.org/current/userguide/compatibili
 
 coroutines = "1.10.2"    # https://github.com/Kotlin/kotlinx.coroutines/releases
 
-dokka = "2.0.0"          # https://github.com/Kotlin/dokka/releases
+dokka = "2.1.0"          # https://github.com/Kotlin/dokka/releases
 
 [plugins]
 
