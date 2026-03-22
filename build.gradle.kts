@@ -26,6 +26,7 @@ plugins {
 dependencies {
 	// List the 'library' projects
 	library(projects.renderer)
+	library(projects.aggregator)
 	library(projects.dokkaMkdocs)
 }
 
