@@ -62,7 +62,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			}
 
 			includeEmptyDirs = true
-			duplicatesStrategy = DuplicatesStrategy.WARN // TODO make each module generate files in its own directory, afterwards remove this
+			duplicatesStrategy = DuplicatesStrategy.FAIL
 		}
 
 		val generateMkDocsNavigation by target.tasks.registering {
