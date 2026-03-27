@@ -48,7 +48,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 		val dokkaCopyIntoMkDocs by target.tasks.registering(Sync::class) {
 			group = GROUP
-			description = "Copies the Dokkatoo pages into the website."
+			description = "Copies the Dokka pages into the website."
 
 			val dokkaTasks = target.tasks.matching { it.name.startsWith("dokkaGenerate") && it.name.endsWith("Mkdocs") }
 			dependsOn(dokkaTasks)
@@ -240,7 +240,7 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 
 		val embedDokkaIntoMkDocs by target.tasks.registering {
 			group = GROUP
-			description = "Lifecycle task to embed configured Dokkatoo modules into a Material for MkDocs website"
+			description = "Lifecycle task to embed configured Dokka modules into a Material for MkDocs website"
 
 			dependsOn(dokkaCopyIntoMkDocs, embedMkDocsNavigation)
 		}
