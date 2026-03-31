@@ -115,7 +115,7 @@ nav:
 # !!! EMBEDDED DOKKA START, DO NOT COMMIT !!! #
 # !!! EMBEDDED DOKKA END, DO NOT COMMIT !!! #
 
-  - Reference (plugin API):
+  - Plugin reference:
       - reference.md
 
   - News:
