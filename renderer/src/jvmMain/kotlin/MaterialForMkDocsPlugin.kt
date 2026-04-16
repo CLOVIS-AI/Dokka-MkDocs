@@ -53,6 +53,10 @@ class MaterialForMkDocsPlugin : DokkaPlugin() {
 	val briefCommentPreprocessor: Extension<PageTransformer, *, *> by extending {
 		mkdocsPreprocessor with BriefCommentPreprocessor()
 	}
+
+	val overloadGroupingTransformer: Extension<PageTransformer, *, *> by extending {
+		mkdocsPreprocessor with OverloadGroupingTransformer() order { before(methodGroupingTransformer) }
+	}
 	
 	val methodGroupingTransformer: Extension<PageTransformer, *, *> by extending {
 		mkdocsPreprocessor with MethodGroupingTransformer()
