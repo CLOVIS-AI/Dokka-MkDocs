@@ -39,9 +39,14 @@ internal fun RenderingContext.buildPlatformHinted(node: PlatformHintedContent) {
 
 internal fun RenderingContext.buildPlatformDivergent(node: ContentDivergentGroup) {
 	for (instance in node.children) {
+		appendLine()
+		appendLine("<div class=\"dokka-symbol-block\" style=\"background: color-mix(in srgb, var(--md-code-bg-color) 30%, transparent); margin-top: 0.5rem; padding: 1px .7rem .2rem .7rem; border-radius: 0.5rem;\" markdown>")
+
 		for (group in instance.children) {
 			buildPlatformsGroup(group)
 		}
+
+		appendLine("</div>")
 	}
 }
 
