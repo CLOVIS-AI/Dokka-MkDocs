@@ -77,6 +77,30 @@ class Example() : MyInterface {
 	 * @param bar This is a parameter.
 	 * @return This is a return type.
 	 */
+	fun foo(bar: Boolean): Boolean {
+		TODO()
+	}
+
+	/**
+	 * This is an example function.
+	 *
+	 * This is a reference to a parameter: [bar].
+	 *
+	 * @param bar This is a parameter.
+	 * @return This is a return type.
+	 */
+	fun foo(bar: Char): Boolean {
+		TODO()
+	}
+
+	/**
+	 * This is an example function.
+	 *
+	 * This is a reference to a parameter: [bar].
+	 *
+	 * @param bar This is a parameter.
+	 * @return This is a return type.
+	 */
 	fun foo(bar: String): Boolean {
 		TODO()
 	}
@@ -124,8 +148,55 @@ fun Example(id: Int): Example {
 
 /**
  * This is a top-level function.
+ *
+ * It has a long and complex documentation, with code examples and everything.
+ *
+ * ### Example
+ *
+ * ```kotlin
+ * println(topLevelFunction() + 42)
+ * ```
+ *
+ * @see Example The [Example] class is completely unrelated to this function.
+ * @author OpenSavvy
  */
 fun topLevelFunction(): Int {
+	TODO()
+}
+
+/**
+ * This is a top-level function.
+ *
+ * It has a long and complex documentation, with code examples and everything.
+ *
+ * ### Example
+ *
+ * ```kotlin
+ * println(topLevelFunction() + 42)
+ * ```
+ *
+ * @see Example The [Example] class is completely unrelated to this function.
+ * @author OpenSavvy
+ */
+fun topLevelFunction(a: Int) {
+	TODO()
+}
+
+/**
+ * This is a top-level function.
+ *
+ * It has a long and complex documentation, with code examples and everything.
+ *
+ * ### Example
+ *
+ * ```kotlin
+ * println(topLevelFunction() + 42)
+ * ```
+ *
+ * @see Example The [Example] class is completely unrelated to this function.
+ * @author OpenSavvy
+ */
+fun topLevelFunction(a: String) {
 	TODO()
 }
 
