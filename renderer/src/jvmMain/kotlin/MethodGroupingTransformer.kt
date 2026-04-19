@@ -74,7 +74,11 @@ class MethodGroupingTransformer : PageTransformer {
 											alreadyMerged.add(memberPage)
 											allMergedPages.add(memberPage)
 											row.copy(
-												children = memberPage.content.children.map { it.demoteHeaders(2) }
+												children = memberPage.content.children.mapIndexed { index, child ->
+													// index == 0: first block in the page, description of the class
+													// index > 0: later blocks, method/property/constructor details
+													child.demoteHeaders(if (index == 0) 2 else 3)
+												}
 											)
 										} else {
 											// Already merged as part of an overload group. Remove this row.

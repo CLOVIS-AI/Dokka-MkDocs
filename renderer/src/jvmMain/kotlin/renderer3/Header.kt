@@ -29,12 +29,14 @@ internal fun RenderingContext.buildHeader(
 		2 -> Decoration.ofPrefix("## ")
 		3 -> Decoration.ofPrefix("### ")
 		4 -> Decoration.ofPrefix("#### ")
-		5 -> Decoration.ofPrefix("##### ")
-
-		else -> Decoration { content ->
+		5, 6, 7 -> Decoration { content ->
 			append("**")
 			content()
 			append("**")
+			appendLine()
+		}
+		else -> Decoration { content ->
+			content()
 			appendLine()
 		}
 	}

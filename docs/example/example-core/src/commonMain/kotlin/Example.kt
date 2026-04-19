@@ -54,6 +54,26 @@ class Example() : MyInterface {
 	 *
 	 * This is a reference to a parameter: [bar].
 	 *
+	 * # Level 1
+	 *
+	 * This is a level 1 header.
+	 *
+	 * ## Level 2
+	 *
+	 * This is a level 2 header.
+	 *
+	 * ### Level 3
+	 *
+	 * This is a level 3 header.
+	 *
+	 * #### Level 4
+	 *
+	 * This is a level 4 header.
+	 *
+	 * ##### Level 5
+	 *
+	 * This is a level 5 header.
+	 *
 	 * @param bar This is a parameter.
 	 * @return This is a return type.
 	 */
