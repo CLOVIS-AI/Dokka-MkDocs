@@ -42,6 +42,10 @@ private val groupStyles: Map<out Style, Decorator> = mapOf(
 		appendLine()
 		appendLine("</blockquote>")
 	},
+	TextStyle.Block to Decorator { content ->
+		content()
+		ensureNewline()
+	},
 	MultilineSignatureStyle.Wrapped to Decorator { content ->
 		content()
 		appendLine()

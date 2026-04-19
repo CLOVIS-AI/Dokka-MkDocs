@@ -30,4 +30,10 @@ internal data class RenderingContext(
 		appendLine(text)
 		appendLine()
 	}
+
+	fun ensureNewline() {
+		if (this.isNotEmpty() && this.last() != '\n') {
+			appendLine()
+		}
+	}
 }

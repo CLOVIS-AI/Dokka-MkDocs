@@ -1,5 +1,16 @@
 package opensavvy.dokka.material.mkdocs.example
 
+import kotlin.jvm.JvmName
+
+/**
+ * This is an annotation.
+ *
+ * It is used in [anotherTopLevelFunction] and on [Example.foo].
+ */
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.VALUE_PARAMETER)
+@MustBeDocumented
+annotation class MyAnnotation
+
 /**
  * This class is an example to see how the documentation website is generated.
  *
@@ -55,6 +66,8 @@ class Example() : MyInterface {
 	 *
 	 * @see Example See the [Example] class for more information.
 	 */
+	@MyAnnotation
+	@JvmName("foo_int")
 	fun foo(number: Int): Boolean {
 		TODO()
 	}
@@ -102,7 +115,7 @@ fun topLevelFunction(): Int {
  * This a link to a method: [Example.foo].
  */
 fun anotherTopLevelFunction(
-	param1: String,
+	@MyAnnotation param1: String,
 	param2: Int,
 	param3: Boolean,
 	param4: String = "default",
