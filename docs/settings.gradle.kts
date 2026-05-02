@@ -60,3 +60,7 @@ include(
 	"example:example-core",
 	"example:example-app",
 )
+
+include("example:example-test")
+val tests = project(":example:example-test")
+tests.projectDir = file("../test-data")
