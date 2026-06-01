@@ -63,6 +63,9 @@ include(
 	"renderer",
 	"dokka-mkdocs",
 
+	"test-data",
+	"test-runner",
+
 	"gradle:templates:template-app",
 	"gradle:templates:template-lib",
 )

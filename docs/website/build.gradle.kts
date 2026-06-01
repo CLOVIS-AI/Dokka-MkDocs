@@ -6,4 +6,5 @@ plugins {
 dependencies {
 	dokka(projects.example.exampleCore)
 	dokka(projects.example.exampleApp)
+	dokka(projects.example.exampleTest)
 }
