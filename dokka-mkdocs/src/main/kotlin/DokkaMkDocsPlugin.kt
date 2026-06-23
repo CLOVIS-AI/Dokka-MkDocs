@@ -1,11 +1,14 @@
 package opensavvy.dokka.gradle
 
 import org.gradle.api.Project
+import org.gradle.api.attributes.Attribute
+import org.gradle.api.attributes.Usage
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Sync
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.jetbrains.dokka.gradle.formats.DokkaFormatPlugin
@@ -23,6 +26,35 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 			dokkaPlugin("dev.opensavvy.dokka.mkdocs:renderer:$DokkaMkDocsVersion")
 		}
 
+		// The aggregator project applies DokkaMkDocsPlugin via the kotlin.library convention plugin.
+		// Adding it to dokkaMkdocsPublicationPlugin (DokkaClasspathAttribute=dokka-publication-plugins)
+		// causes Gradle to select the aggregator's empty dokkaMkdocsPublicationPluginApiOnlyConsumable
+		// variant instead of its JAR, because that variant also has dokka-publication-plugins.
+		//
+		// Fix: resolve the aggregator with DokkaClasspathAttribute=dokka-plugins. No aggregator variant
+		// matches dokka-plugins, so Gradle falls through to runtimeElements and returns the JAR.
+		val aggregatorBucket = project.configurations.create("dokkaMkdocsAggregatorPlugin~internal") {
+			isCanBeResolved = false
+			isCanBeConsumed = false
+		}
+		project.dependencies.add("dokkaMkdocsAggregatorPlugin~internal", "dev.opensavvy.dokka.mkdocs:aggregator:$DokkaMkDocsVersion")
+
+		val aggregatorResolver = project.configurations.create("dokkaMkdocsAggregatorPluginResolver~internal") {
+			isCanBeResolved = true
+			isCanBeConsumed = false
+			isTransitive = false
+			extendsFrom(aggregatorBucket)
+			attributes {
+				attribute(Usage.USAGE_ATTRIBUTE, project.objects.named<Usage>(Usage.JAVA_RUNTIME))
+				attribute(Attribute.of("org.jetbrains.dokka.format", String::class.java), formatName)
+				attribute(Attribute.of("org.jetbrains.dokka.classpath", String::class.java), "dokka-plugins")
+			}
+		}
+
+		dokkaTasks.generatePublication.configure {
+			generator.pluginsClasspath.from(aggregatorResolver)
+		}
+
 		moduleOutputFiles = project.layout.buildDirectory.dir("dokka/mkdocs").map { listOf(it.asFile) }
 	}
 
@@ -34,8 +66,8 @@ abstract class DokkaMkDocsPlugin : DokkaFormatPlugin(formatName = "mkdocs") {
 		// "dokkaMkdocsPublicationPlugin" is used only by dokkaGeneratePublicationMkdocs,
 		// not by the per-module dokkaGenerateModuleMkdocs task.
 		// This prevents all-modules-page-plugin from suppressing singleGeneration in module tasks.
+		// (The aggregator is handled separately in configure() above to avoid a Gradle variant-selection bug.)
 		target.dependencies.add("dokkaMkdocsPublicationPlugin", "org.jetbrains.dokka:all-modules-page-plugin:$DokkaVersion")
-		target.dependencies.add("dokkaMkdocsPublicationPlugin", "dev.opensavvy.dokka.mkdocs:aggregator:$DokkaMkDocsVersion")
 
 		// Use the Gradle project's leaf name (e.g. "example-core") as the module path instead of
 		// the full project path (e.g. "example/example-core"). This gives clean output URLs.
