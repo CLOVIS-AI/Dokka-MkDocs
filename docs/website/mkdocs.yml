@@ -79,6 +79,9 @@ plugins:
         as_update: date.updated
       use_git: false
 
+extra_css:
+  - assets/dokka-mkdocs.css
+
 extra:
   analytics:
     provider: custom
