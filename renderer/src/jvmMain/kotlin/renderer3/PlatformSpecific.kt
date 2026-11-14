@@ -47,6 +47,7 @@ internal fun RenderingContext.buildPlatformDivergent(node: ContentDivergentGroup
 		}
 
 		appendLine("</div>")
+		appendLine()
 	}
 }
 
