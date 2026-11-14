@@ -4,6 +4,7 @@ tags:
 title: "simpleFunction"
 ---
 
+
 # simpleFunction
 
 <div class="dokka-symbol-block" markdown>
@@ -23,3 +24,4 @@ Hello world!
 </div>
 
 </div>
+

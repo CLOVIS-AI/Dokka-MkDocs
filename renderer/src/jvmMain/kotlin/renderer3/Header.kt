@@ -23,6 +23,8 @@ import org.jetbrains.dokka.pages.ContentHeader
 internal fun RenderingContext.buildHeader(
 	header: ContentHeader,
 ) {
+	ensureNewline()
+	appendLine()
 
 	val decorator = when (header.level) {
 		1 -> Decoration.ofPrefix("# ")
